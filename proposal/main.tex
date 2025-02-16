@@ -19,17 +19,12 @@
 \maketitle
 
 \section{Context}
-Agda is a dependently typed programming language and proof assistant, which is mostly used for research purposes.
-It has relatively few libraries, making it a less attractive language for development.
-We believe that an implementation of the \texttt{Data.Map} module from Haskell's \texttt{containers} package would be a good addition for the language.
+Agda is a dependently typed programming language and proof assistant, which is mostly used for research purposes. It has relatively few libraries, making it a less attractive language for development. We believe that an implementation of the \texttt{Data.Map} module from Haskell's \texttt{containers} package would be a good addition for the language.
 
 \texttt{Data.Map} is a finite map of key-value pairs. As can be read in the documentation, the implementation of \texttt{Data.Map} is based on size balanced trees \cite{adams1993functional, nievergelt1972binary}.
 
 \section{Motivation}
-None of the members of our team have experience with Agda. 
-Based on what we do know about the language, we think this project should be a good opportunity to learn about Agda and what distinguishes it from Haskell.
-Because we chose to work with a language none of us have experience with, we purposefully chose a topic that has clear bounds over a more creative one.
-Similarly, because of the clear end result, we hope that the result of our project will be a library that is actually useful to others.
+None of the members of our team have experience with Agda. Based on what we do know about the language, we think this project should be a good opportunity to learn about Agda and what distinguishes it from Haskell. We purposefully chose a topic that has clear bounds instead of one that might be considered more creative. This should allow us to deliver a high-quality package that might actually be useful to others.
 
 \section{Deliverables}
 \begin{itemize}
@@ -39,22 +34,7 @@ Similarly, because of the clear end result, we hope that the result of our proje
 \end{itemize}
 
 \section{Planning}
-The total time for the project is approximately 6 - 7 weeks.
-
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{ r | c }
-        Week & Content \\
-        1 & Reading, understanding \texttt{Data.Map} \\
-        2 &  \\
-        3 &  \\
-        4 &  \\
-        5 &  \\
-        6 &  \\
-    \end{tabular}
-    \caption{Schedule}
-    \label{tab:schedule}
-\end{table}
+The total time for the project is approximately 6 - 7 weeks. Our work can be split into 3 phases. First, we want to have a good understanding of \texttt{Data.Map} and its underlying theories (1-2 weeks). Using this understanding, we will then make a translation to a pure Agda implementation while looking for possible optimizations that are not possible in Haskell (2-3 weeks). Finally, we will write benchmarks and, where applicable, proofs for our new implementation (2-3 weeks).
 
 
 \bibliography{main}
