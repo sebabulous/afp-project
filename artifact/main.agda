@@ -43,6 +43,10 @@ data Map (K : Set) (V : Set) : Set where
   tip : Map K V
   node : Nat → K → V → Map K V → Map K V → Map K V
 
+null : {K : Set}{V : Set} → Map K V → Bool
+null tip = true
+null (node _ _ _ _ _) = false
+
 size : {K : Set}{V : Set} → Map K V → Nat
 size tip = 0
 size (node s _ _ _ _) = s
