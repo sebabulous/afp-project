@@ -18,6 +18,21 @@
 
 \maketitle
 
+\section{Planning}
 
+While we had originally planned to have finished the na\"ive implementation of Data.Map, understanding Agda was a bit of a larger jump than we had anticipated.
+While we were able to write working code, we could not necessarily explain why code worked.
+We have had a meeting with Lawrence, who was able to explain some things to us, and with lectures on Agda having started as well, we expect to make way faster progress than the pace we have had so far.
+
+Once we are satisfied with the na\"ive implementation, we will implement tree balancing for the map implementation.
+We want to make the balancing threshold a variable that is part of the map structure, and we believe the value that represents it can nicely be encoded in the type of map.
+If it turns out to be easier to store this value in the datatype's constructors, we will do so first and move it to the type level at a later point.
+
+After we have implemented tree balancing, we will have an implementation for which it makes sense to start benchmarking and testing performance.
+We will also write documentation for the module at this point.
+
+If we have time left, we want to try and see if we can encode the map tree's size in the type.
+While this seems feasible for a perfectly balanced tree, having the balancing threshold be variable makes this appear to become a lot trickier, if it is even possible.
+Moving the size to the type sounds like a perfect challenge to do near the end of the planning since we will not be wasting time if it is impossible, and it seems like a fantastic learning opportunity if it does turn out to be possible.
 
 \end{document}
