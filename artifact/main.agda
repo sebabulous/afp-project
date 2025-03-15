@@ -16,25 +16,18 @@ data Ord : Set where
   lt : Ord
   gt : Ord
 
+-- source: https://agda.readthedocs.io/en/v2.5.2/language/record-types.html
 record Pair (A B : Set): Set where
   constructor _,_
   field
     fst : A
     snd : B
 
-
 record Comparable (A : Set) : Set where
   field
     compare : A → A → Ord
 
 open Comparable {{...}} public
-
--- source: https://agda.readthedocs.io/en/v2.5.2/language/record-types.html
-record Pair (A B : Set) : Set where
-  constructor _,_
-  field
-    fst : A
-    snd : B
 
 instance
   NatCmp : Comparable Nat
@@ -156,7 +149,6 @@ balanceL k v (node ls lk lv ll@(node lls _ _ _ _) lr@(node lrs lrk lrv lrl lrr))
 balanceL k v tip r@(node rs _ _ _ _) = node (1 + rs) k v tip r
 balanceL k v (node ls lk lv ll lr) (node rs _ _ _ _) with compare rs (delta * ls)
 balanceL k v (node ls lk lv ll@(node lls _ _ _ _) lr@(node lrs lrk lrv lrl lrr)) r@(node rs _ _ _ _) | gt = if lrs < ratio * lls then node (1 + ls + rs) lk lv ll (node (1 + rs + lrs) k v lr r) else node (1 + ls + rs) lrk lrv (node (1 + lls + size lrl) lk lv ll lrl) (node (1 + rs + size lrr) k v lrr r)
-balanceL k v (node ls lk lv _ _) (node rs _ _ _ _) | gt = {!   !}
 balanceL k v l@(node ls lk lv ll lr) r@(node rs _ _ _ _) | _ = node (1 + ls + rs) k v l r
 
 
@@ -173,7 +165,6 @@ balanceR k v tip (node rs rk rv rl@(node rls rlk rlv rll rlr) rr@(node rrs _ _ _
 balanceR k v l@(node ls _ _ _ _) tip = node (1 + ls) k v l tip
 balanceR k v (node ls _ _ _ _) (node rs _ _ _ _) with compare rs (delta * ls)
 balanceR k v l@(node ls _ _ _ _) (node rs rk rv rl@(node rls rlk rlv rll rlr) rr@(node rrs _ _ _ _)) | gt = if rls < ratio * rrs then node (1 + ls + rs) rk rv (node (1 + ls + rls) k v l rl) rr else node (1 + ls + rs) rlk rlv (node (1 + ls + size rll) k v l rll) (node (1 + rrs + size rlr) rk rv rlr rr)
-balanceR k v (node ls _ _ _ _) (node _ _ _ _ _) | gt = {!   !}
 balanceR k v l@(node ls _ _ _ _) r@(node rs _ _ _ _) | _ = node (1 + ls + rs) k v l r
 
 
