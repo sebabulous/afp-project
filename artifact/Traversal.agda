@@ -3,6 +3,8 @@ module artifact.Traversal where
 open import Agda.Builtin.Maybe
 
 open import artifact.Main
+open import artifact.Folds
+open import artifact.Insertion
 
 -- Map a function over all values in the map.
 map : {A B K : Set} → (A → B) → Map K A → Map K B

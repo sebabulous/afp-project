@@ -50,11 +50,6 @@ data Map (K : Set) (V : Set) : Set where
   tip : Map K V
   node : Nat → K → V → Map K V → Map K V → Map K V
 
--- isValid : {K : Set} → {V : Set} → {{Comparable K}} → Map K V → Bool
--- isValid tip = true
--- isValid (node s k' v' l r) with size l + size r
--- isValid (node s k' v' l r) | s' = ((s' + 1 == s) && isValid l) && isValid r
-
 ----------------------------------
 -- Data.Map functions
 ----------------------------------
