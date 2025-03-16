@@ -10,7 +10,7 @@
 
 \authorrunning{M.D. Streep, S. Koppen, D. van Westerlaak}
 
-\date{February 2025}
+\date{March 2025}
 
 \bibliographystyle{acm}
 
@@ -18,6 +18,34 @@
 
 \maketitle
 
+
+
+\section*{Admin Note}
+As you are aware, one of the members of our group, Wessel, decided to drop out of the course. He has since been replaced by Myrthe, who was left alone after both other members of her grouped dropped out too.
+
+\section*{Status}
+While the initial learning curve was steap, we have been able to get a much better understanding of Agda as well as some working experience. We have also studied the implementation of Data.Map, which makes use of binary search trees of bounded balance. We will give brief description of bounded binary trees, followed by a discussion of some open questions/ difficulties we have not yet resolved. Finally, we will give an overview of our updated planning.
+
+\subsection*{Binary Search Trees of Bounded Balance}
+When working with binary search trees, a compromise must be made between time it takes to find an element (which of course depends on how well-balanced the tree is) and how frequently the tree should be rebalanced. What makes binary trees of bounded balance unique is that they cary a parameter that controls when a rebalancing is triggered. A first implementation of this can be found in the file \texttt{DeletionUpdate.agda}, where the constants \texttt{delta} and \texttt{ratio} are introduced. We would be interested in varying these constants as part of our performance testing, as the optimal values found by the creators of Data.Map do not seem to coincide with those found by the authors of the corresponding paper.
+
+
+\subsubsection*{Open questions}
+\begin{itemize}
+  \item Data.Map defines (and makes use of) functor/ applicative instances. Does Agda provide comparable built-in functionalities? When trying to define our own versions of functor/ applicative, we already learned that they are elements of \texttt{set$_{1}$}, but we don't fully understand why.
+  \item So far, we have not taken into account strict/ lazy evaluation. We would be interested to learn more about Agda's 'normal order' evaluation and see how it can affect our implementation.
+  \item There are some partial functions (such as find). By extending the Data.Map type with a length (i.e. by making it a vector), we could completely remove this issue.
+\end{itemize}
+
+
+
+\section*{Planning}
+
+While we had originally planned to have finished the na\"ive implementation of Data.Map, understanding Agda was a bit of a larger jump than we had anticipated. While we were able to write working code, we could not necessarily explain why code worked. We have had a meeting with Lawrence, who was able to explain some things to us, and with lectures on Agda having started as well, we expect to make way faster progress than the pace we have had so far. Once we are satisfied with the na\"ive implementation, we will implement tree balancing for the map implementation. We want to make the balancing threshold a variable that is part of the map structure, and we believe the value that represents it can nicely be encoded in the type of map. If it turns out to be easier to store this value in the datatype's constructors, we will do so first and move it to the type level at a later point.
+
+After we have implemented tree balancing, we will have an implementation for which it makes sense to start benchmarking and testing performance. We will also write documentation for the module at this point.
+
+If we have time left, we want to try and see if we can encode the map tree's size in the type. While this seems feasible for a perfectly balanced tree, having the balancing threshold be variable makes this appear to become a lot trickier, if it is even possible. Moving the size to the type sounds like a perfect challenge to do near the end of the planning since we will not be wasting time if it is impossible, and it seems like a fantastic learning opportunity if it does turn out to be possible.
 
 
 \end{document}
