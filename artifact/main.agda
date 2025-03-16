@@ -29,22 +29,22 @@ open Comparable {{...}} public
 instance
   NatCmp : Comparable Nat
   compare {{ NatCmp }} zero zero = eq
-  compare {{ NatCmp }} zero (suc _) = gt
-  compare {{ NatCmp }} (suc _) zero = lt
+  compare {{ NatCmp }} zero (suc _) = lt
+  compare {{ NatCmp }} (suc _) zero = gt
   compare {{ NatCmp }} (suc x) (suc y) = compare x y
 
---record Functor (F : (A : Set) → Set): Set where
---  field
---    fmap : {A B : Set} → (A → B) → F A → F B
+record Functor (F : (A : Set) → Set): Set₁ where
+  field
+    fmap : {A B : Set} → (A → B) → F A → F B
 
---open Functor {{...}} public
+open Functor {{...}} public
 
---record Applicative (F : Set → Set): Set where
---  field
---    pure : {A : Set} → A → F A
---    _<*>_ : {A B : Set} → F (A → B) → F A → F B
+record Applicative (F : Set → Set): Set₁ where
+  field
+    pure : {A : Set} → A → F A
+    _<*>_ : {A B : Set} → F (A → B) → F A → F B
 
---open Applicative {{...}} public
+open Applicative {{...}} public
 
 data Map (K : Set) (V : Set) : Set where
   tip : Map K V
