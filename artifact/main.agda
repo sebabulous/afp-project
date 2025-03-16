@@ -39,6 +39,12 @@ instance
 
 --open Functor {{...}} public
 
+--record Applicative (F : Set → Set): Set where
+--  field
+--    pure : {A : Set} → A → F A
+--    _<*>_ : {A B : Set} → F (A → B) → F A → F B
+
+--open Applicative {{...}} public
 
 data Map (K : Set) (V : Set) : Set where
   tip : Map K V
