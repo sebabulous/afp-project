@@ -1,3 +1,4 @@
+{-# OPTIONS --allow-unsolved-metas #-}
 module artifact.MinMax where
 
 open import Agda.Builtin.Maybe
