@@ -1,3 +1,4 @@
+{-# OPTIONS --allow-unsolved-metas #-}
 module artifact.Main where
 
 open import Agda.Builtin.Nat
@@ -51,11 +52,11 @@ data Map (K : Set) (V : Set) : Set where
   node : Nat → K → V → Map K V → Map K V → Map K V
 
 ----------------------------------
--- Data.Map functions
+-- Other functions
 ----------------------------------
 
-empty : {K : Set}{V : Set} -> Map K V
-empty = tip
+balanceL : {K : Set}{V : Set} → K → V → Map K V → Map K V → Map K V 
+balanceL = {!   !}
 
-singleton : {K : Set}{V : Set} -> K -> V -> Map K V
-singleton k v = node 1 k v tip tip
+balanceR : {K : Set}{V : Set} → K → V → Map K V → Map K V → Map K V 
+balanceR = {!   !}
