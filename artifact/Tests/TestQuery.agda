@@ -77,7 +77,7 @@ _ : lookupLE 2 test35 ≡ nothing
 _ = refl
 
 _ : lookupLE 4 test35 ≡ just KV3b
-_ = {!  refl !}
+_ = refl
 
 _ : lookupLE 5 test35 ≡ just KV5a
 _ = refl
