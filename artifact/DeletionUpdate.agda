@@ -5,6 +5,7 @@ open import Agda.Builtin.Bool
 open import Agda.Builtin.Maybe
 
 open import artifact.Main
+open import artifact.Construction
 open import artifact.Query
 
 ----------------------------------

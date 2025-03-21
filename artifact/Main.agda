@@ -47,16 +47,13 @@ record Applicative (F : Set → Set): Set₁ where
 
 open Applicative {{...}} public
 
+record Monoid (M : Set → Set): Set₁ where 
+  field 
+    return : {A : Set} → A → M A 
+    _>>=_ : {A B : Set} → M A → (A → M B) → M B
+
+open Monoid {{...}} public
+
 data Map (K : Set) (V : Set) : Set where
   tip : Map K V
   node : Nat → K → V → Map K V → Map K V → Map K V
-
-----------------------------------
--- Other functions
-----------------------------------
-
-balanceL : {K : Set}{V : Set} → K → V → Map K V → Map K V → Map K V 
-balanceL = {!   !}
-
-balanceR : {K : Set}{V : Set} → K → V → Map K V → Map K V → Map K V 
-balanceR = {!   !}
