@@ -2,11 +2,19 @@ module artifact.Main where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
+open import Agda.Builtin.Equality
+
+_||_ : Bool → Bool → Bool
+true || _ = true
+_ || true = true
+_ || _ = false
 
 _&&_ : Bool → Bool → Bool
 false && _ = false
 _ && false = false
 _ && _ = true
+
+infixl 3 _&&_
 
 data Ord : Set where
   eq : Ord
@@ -56,3 +64,15 @@ open Monoid {{...}} public
 data Map (K : Set) (V : Set) : Set where
   tip : Map K V
   node : Nat → K → V → Map K V → Map K V → Map K V
+
+record Equal (A : Set) : Set where
+  field
+    equal : A → A → Bool
+
+open Equal {{...}} public
+
+instance
+  EqMap : {K V : Set} → {{Equal K}} → {{Equal V}} → Equal (Map K V)
+  equal {{ EqMap }} tip tip = true
+  equal {{ EqMap }} (node s k v l r) (node s' k' v' l' r') = s == s' && equal k k' && equal v v' && equal l l' && equal r r'
+  equal {{ EqMap }} _ _ = false
