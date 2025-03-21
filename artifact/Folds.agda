@@ -30,8 +30,10 @@ foldlWithKey f v (node s k v₁ l r) = foldlWithKey f (f (foldlWithKey f v l) k 
 
 -- Fold the keys and values in the map using the given monoid, 
 -- such that foldMapWithKey f = fold . mapWithKey f
--- foldMapWithKey : {K V M : Set} → {{Monoid M}} → (K → V → M) → Map K V → M
--- foldMapWithKey f m = ?
+foldMapWithKey : {K V M : Set} → {{Monoid M}} → (K → V → M) → Map K V → M 
+foldMapWithKey f tip = mempty
+foldMapWithKey f (node 1 x₁ x₂ _ _) = f x₁ x₂
+foldMapWithKey f (node _ x₁ x₂ m m₁) = mappend (foldMapWithKey f m) (mappend (f x₁ x₂) (foldMapWithKey f m₁)) 
 
 -- %%%%%%%%%%%%% Strict folds %%%%%%%%%%%%%%%%%%%%%%
 
@@ -56,5 +58,5 @@ foldrWithKey' f v (node s k v₁ l r) = foldrWithKey' f (primForce (foldrWithKey
 -- A strict version of foldlWithKey. Each application of the operator is evaluated before using 
 -- the result in the next application. This function is strict in the starting value.
 foldlWithKey' : {V K A : Set} → (V → K → A → V) → V → Map K A → V
-foldlWithKey' f v tip = v
+foldlWithKey' f v tip = v  
 foldlWithKey' f v (node s k v₁ l r) = foldlWithKey' f (primForce (foldlWithKey' f v l) (λ x → f x k v₁)) r

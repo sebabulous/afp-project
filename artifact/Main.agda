@@ -54,10 +54,10 @@ record Applicative (F : Set → Set): Set₁ where
 
 open Applicative {{...}} public
 
-record Monoid (M : Set → Set): Set₁ where 
+record Monoid (M : Set) : Set where 
   field 
-    return : {A : Set} → A → M A 
-    _>>=_ : {A B : Set} → M A → (A → M B) → M B
+    mempty : M
+    mappend : M -> M -> M
 
 open Monoid {{...}} public
 
