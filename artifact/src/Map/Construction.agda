@@ -1,4 +1,3 @@
-{-# OPTIONS --allow-unsolved-metas #-}
 module Map.Construction where
 
 open import Agda.Builtin.List

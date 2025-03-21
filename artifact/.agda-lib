@@ -1,1 +1,2 @@
 include: src/
+flags: --allow-unsolved-metas

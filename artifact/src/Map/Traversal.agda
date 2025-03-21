@@ -1,4 +1,3 @@
-{-# OPTIONS --allow-unsolved-metas #-}
 module Map.Traversal where
 
 open import Agda.Builtin.Maybe

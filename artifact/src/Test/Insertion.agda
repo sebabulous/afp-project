@@ -1,11 +1,11 @@
-module Tests.TestFilter where
+module Test.Insertion where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.String
 open import Agda.Builtin.Equality
 
-open import Tests.TestCases
-open import Map.Filter
+open import Test.Cases
 open import Map.Map
+open import Map.Insertion
 
 -- TO DO: write tests

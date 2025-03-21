@@ -1,12 +1,12 @@
-module Tests.TestTraversal where
+module Test.Traversal where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 open import Agda.Builtin.String
 open import Agda.Builtin.Equality
 
-open import Tests.TestCases
-open import Tests.Valid
+open import Test.Cases
+open import Test.Valid
 open import Map.Construction
 open import Map.Map
 open import Map.Traversal

@@ -1,4 +1,4 @@
-module Tests.TestCases where
+module Test.Cases where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.String

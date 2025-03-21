@@ -1,11 +1,11 @@
-module Tests.TestMinMax where
+module Test.MinMax where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.String
 open import Agda.Builtin.Maybe
 open import Agda.Builtin.Equality
 
-open import Tests.TestCases
+open import Test.Cases
 open import Map.Construction
 open import Map.MinMax
 open import Map.Map
@@ -33,7 +33,7 @@ _ = refl
 _ : deleteMin test537 ≡ test57
 _ = refl
 
-_ : deleteMax test537 ≡ test35
+_ : deleteMax test537 ≡ test53
 _ = refl
 
 _ : deleteFindMin test537 ≡ KV3b , test57

@@ -1,4 +1,4 @@
-module Tests.Valid where
+module Test.Valid where
 
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Nat

@@ -1,4 +1,3 @@
-{-# OPTIONS --allow-unsolved-metas #-}
 module Map.Conversion where
 
 open import Agda.Builtin.List

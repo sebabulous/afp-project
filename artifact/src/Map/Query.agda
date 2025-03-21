@@ -1,4 +1,3 @@
-{-# OPTIONS --allow-unsolved-metas #-}
 module Map.Query where
 
 open import Agda.Builtin.Bool
