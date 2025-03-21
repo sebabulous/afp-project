@@ -22,8 +22,8 @@ test53 = node 2 (Pair.fst KV5a) (Pair.snd KV5a)
         -- fromList (KV5a ∷ KV3b ∷ [])
 
 test35 : Map Nat String
-test35 = node 2 (Pair.fst KV5a) (Pair.snd KV5a) 
-        (node 1 (Pair.fst KV3b) (Pair.snd KV3b) tip tip) tip 
+test35 = node 2 (Pair.fst KV3b) (Pair.snd KV3b) 
+        tip (node 1 (Pair.fst KV5a) (Pair.snd KV5a) tip tip)
         -- fromList (KV3b ∷ KV5a ∷ []) 
 
 test35update3 : Map Nat String
@@ -35,6 +35,23 @@ test35update5 : Map Nat String
 test35update5 = node 2 (Pair.fst KV5aUpdate) (Pair.snd KV5aUpdate) 
         (node 1 (Pair.fst KV3b) (Pair.snd KV3b) tip tip) tip 
         -- fromList (KV3b ∷ KV5aUpdate ∷ []) 
+
+test35update35 : Map Nat String
+test35update35 = node 2 (Pair.fst KV5aUpdate) (Pair.snd KV5aUpdate) 
+        (node 1 (Pair.fst KV3bUpdate) (Pair.snd KV3bUpdate) tip tip) tip 
+        -- fromList (KV3b ∷ KV5aUpdate ∷ []) 
+
+test35addX : Map Nat String
+test35addX = node 2 (Pair.fst KV3b) "bx"
+        tip (node 1 (Pair.fst KV5a) "ax" tip tip)
+
+test35add1 : Map Nat String
+test35add1 = node 2 (Pair.fst KV3b + 1) (Pair.snd KV3b) 
+        tip (node 1 (Pair.fst KV5a + 1) (Pair.snd KV5a) tip tip)
+
+test35times2 : Map Nat String
+test35times2 = node 2 (Pair.fst KV3b * 2) (Pair.snd KV3b) 
+        tip (node 1 (Pair.fst KV5a * 2) (Pair.snd KV5a) tip tip)
 
 test57 : Map Nat String
 test57 = node 2 (Pair.fst KV5a) (Pair.snd KV5a) 

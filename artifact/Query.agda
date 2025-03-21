@@ -75,8 +75,8 @@ lookupLT k (node s k' v' l r) with compare k k'
            goJust : {K : Set} → {V : Set} → {{Comparable K}} → K → K → V → Map K V → Maybe (Pair K V)
            goJust k k' v' tip = just (k' , v')
            goJust k k' v' (node x x₁ x₂ m m₁) with compare k k' 
-           ... | gt = goJust k x₁ x₂ m₁
-           ... | _ = goJust k k' v' m -- eq or lt
+           ... | gt = goJust k k' v' m₁
+           ... | _ = goJust k x₁ x₂ m -- eq or lt
 ... | _ = lookupLT k l -- eq or lt
 
 -- `lookupGT` finds smallest key greater than the given one and return the corresponding (key, value) pair.

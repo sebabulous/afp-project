@@ -1,3 +1,4 @@
+{-# OPTIONS --allow-unsolved-metas #-}
 module artifact.Traversal where
 
 open import Agda.Builtin.Maybe
@@ -46,11 +47,11 @@ mapAccumRWithKey f a (node s k v l r) = let
    
 -- `mapKeys` f s is the map obtained by applying f to each key of s.
 mapKeys : {K1 K2 V : Set} → {{Comparable K2}} → (K1 → K2) → Map K1 V → Map K2 V
-mapKeys f m = {!   !} -- finishB (foldlWithKey' (\b kx x -> insertB (f kx) x b) emptyB m)
+mapKeys f m = foldlWithKey' (λ b kx x → insert (f kx) x b) tip m 
 
 -- `mapKeysWith` c f s is the map obtained by applying f to each key of s.
 mapKeysWith : {K1 K2 V : Set} → {{Comparable K2}} → (V → V → V) → (K1 → K2) → Map K1 V → Map K2 V
-mapKeysWith c f m = {!   !} -- finishB (foldlWithKey' (\b kx x -> insertWithB c (f kx) x b) emptyB m)
+mapKeysWith c f m = foldlWithKey' (λ b kx x → insertWith c (f kx) x b) tip m 
 
 -- `mapKeysMonotonic` f s == `mapKeys` f s, but works only when f is strictly monotonic. That is, for any values x and y, if x < y then f x < f y. 
 mapKeysMonotonic : {K1 K2 V : Set} → (K1 → K2) → Map K1 V → Map K2 V

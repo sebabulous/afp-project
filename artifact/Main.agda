@@ -1,4 +1,3 @@
-{-# OPTIONS --allow-unsolved-metas #-}
 module artifact.Main where
 
 open import Agda.Builtin.Nat
