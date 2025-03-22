@@ -51,6 +51,7 @@ record Applicative (F : Set → Set): Set₁ where
   field
     pure : {A : Set} → A → F A
     _<*>_ : {A B : Set} → F (A → B) → F A → F B
+    liftA3 : {A B C D : Set} → (A → B → C → D) → F A → F B → F C → F D
 
 open Applicative {{...}} public
 

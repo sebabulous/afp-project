@@ -5,6 +5,7 @@ open import Agda.Builtin.Maybe
 open import Map.Folds
 open import Map.Insertion
 open import Map.Map
+open import Map.Balance
 
 -- Map a function over all values in the map.
 map : {A B K : Set} → (A → B) → Map K A → Map K B
@@ -16,11 +17,23 @@ mapWithKey : {A B K : Set} → (K → A → B) → Map K A → Map K B
 mapWithKey f tip = tip
 mapWithKey f (node s k v l r) = node s k (f k v) (mapWithKey f l) (mapWithKey f r)
 
---traverseWithKey : {K V B F : Set} → {{Applicative F}} → (K → V → F B) → Map K V → F (Map K B)
---traverseWithKey = ?  
+traverseWithKey : {K V B : Set}{F : Set → Set} → {{Applicative F}} →  (K → V → F B) → Map K V → F (Map K B) 
+traverseWithKey f tip = pure tip
+traverseWithKey f (node 1 k v _ _) = pure (λ v₁ → node 1 k v₁ tip tip) <*> f k v -- USE FMAP
+traverseWithKey f (node s k v l r) = liftA3 (λ l₁ v₁ r₁ → node s k v₁ l₁ r₁) (traverseWithKey f l) (f k v) (traverseWithKey f r) -- USE FLIP
 
---traverseMaybeWithKey : {K V B F : Set} → {{Applicative F}} → (K → V → F (Maybe B)) → Map K V → F (Map K B)
---traverseMaybeWithKey = ? 
+traverseMaybeWithKey : {K V B : Set}{F : Set → Set} → {{Comparable K}} → {{Applicative F}} → (K → V → F (Maybe B)) → Map K V → F (Map K B)
+traverseMaybeWithKey f tip = pure tip
+traverseMaybeWithKey f (node s k v tip tip) = pure (λ x → maybe k x) <*> f k v
+   where
+      maybe : {K V : Set} → K → Maybe V → Map K V
+      maybe k (just x) = node 1 k x tip tip
+      maybe k nothing = tip
+traverseMaybeWithKey f (node s k v l r) = liftA3 (λ l₁ v₁ r₁ → combine k l₁ v₁ r₁) (traverseMaybeWithKey f l) (f k v) (traverseMaybeWithKey f r) 
+   where
+      combine : {K V : Set} → {{Comparable K}} → K → Map K V → Maybe V → Map K V → Map K V
+      combine k₁ l₂ (just x) r₂ = link k₁ x l₂ r₂
+      combine _ l₂ nothing r₂ = link2 l₂ r₂
 
 -- `mapAccumWithKey` threads an accumulating argument through the map in ascending order of keys.
 mapAccumWithKey : {A B C K : Set} → (A → K → B → Pair A C) → A → Map K B → Pair A (Map K C)
@@ -54,5 +67,5 @@ mapKeysWith c f m = foldlWithKey' (λ b kx x → insertWith c (f kx) x b) tip m
 
 -- `mapKeysMonotonic` f s == `mapKeys` f s, but works only when f is strictly monotonic. That is, for any values x and y, if x < y then f x < f y. 
 mapKeysMonotonic : {K1 K2 V : Set} → (K1 → K2) → Map K1 V → Map K2 V
-mapKeysMonotonic _ tip = tip
+mapKeysMonotonic _ tip = tip      
 mapKeysMonotonic f (node s k v l r) = node s (f k) v (mapKeysMonotonic f l) (mapKeysMonotonic f r) 
