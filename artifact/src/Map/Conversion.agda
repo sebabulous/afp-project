@@ -1,13 +1,18 @@
 module Map.Conversion where
 
+open import Agda.Builtin.Nat
 open import Agda.Builtin.List
 
 open import Map.Map
 
-elems : {K : Set} → {V : Set} → Map K V → List V
+private variable
+  K V : Set
+  n : Nat
+
+elems : Map K V n → List V
 elems = {!   !}
 
-toList : {K : Set} → {V : Set} → Map K V → List (Pair K V)
+toList : Map K V n → List (Pair K V)
 toList = {!   !}
 
 

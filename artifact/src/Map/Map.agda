@@ -4,6 +4,11 @@ open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Equality
 
+
+private variable
+  K A B : Set
+  m n : Nat
+
 _||_ : Bool → Bool → Bool
 true || _ = true
 _ || true = true
@@ -27,6 +32,15 @@ record Pair (A B : Set): Set where
   field
     fst : A
     snd : B
+
+record StrictTriple (A B C : Set) : Set where
+  field
+    st1 : A
+    st2 : B
+    st3 : C
+
+data Triple (A B C : Set) : Set where
+  _,_,_ : A → B → C → Triple A B C
 
 record Comparable (A : Set) : Set where
   field
@@ -61,9 +75,12 @@ record Monoid (M : Set) : Set where
 
 open Monoid {{...}} public
 
-data Map (K : Set) (V : Set) : Set where
-  tip : Map K V
-  node : Nat → K → V → Map K V → Map K V → Map K V
+-- data Map (K : Set) (V : Set) : Set where
+--   tip : Map K V
+--   node : Nat → K → V → Map K V → Map K V → Map K V
+data Map (K : Set) (V : Set) : Nat → Set where
+  tip : Map K V zero
+  node : {m n : Nat} → Nat → K → V → Map K V m → Map K V n → Map K V (suc (m + n))
 
 record Equal (A : Set) : Set where
   field
@@ -71,8 +88,19 @@ record Equal (A : Set) : Set where
 
 open Equal {{...}} public
 
-instance
-  EqMap : {K V : Set} → {{Equal K}} → {{Equal V}} → Equal (Map K V)
-  equal {{ EqMap }} tip tip = true
-  equal {{ EqMap }} (node s k v l r) (node s' k' v' l' r') = s == s' && equal k k' && equal v v' && equal l l' && equal r r'
-  equal {{ EqMap }} _ _ = false
+-- instance
+--   EqMap : ∀{n} {K V : Set} → {{Equal K}} → {{Equal V}} → Equal (Map K V n)
+--   equal {{ EqMap }} tip tip = true
+--   equal {{ EqMap }} (node s k v l r) (node s' k' v' l' r') = s == s' && equal k k' && equal v v' && equal l l' && equal r r'
+--   equal {{ EqMap }} _ _ = false
+
+
+
+data MapMod K A : Nat → Set where
+  modDelete : Map K A n → MapMod K A (suc n)
+  modInsert : Map K A (suc n) → MapMod K A n
+  modId : Map K A n → MapMod K A n
+
+data MapIns K A : Nat → Set where
+  insInsert : Map K A (suc n) → MapIns K A n
+  insId : Map K A n → MapIns K A n

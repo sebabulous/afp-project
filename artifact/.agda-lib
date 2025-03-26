@@ -1,2 +1,2 @@
 include: src/
-flags: --allow-unsolved-metas
+flags: --allow-unsolved-metas --rewriting

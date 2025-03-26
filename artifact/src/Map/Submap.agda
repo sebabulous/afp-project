@@ -5,7 +5,7 @@ open import Agda.Builtin.Maybe
 
 open import Map.Query
 open import Map.Map
-open import Map.Filter
+-- open import Map.Filter
 
 private variable
   K A B : Set
