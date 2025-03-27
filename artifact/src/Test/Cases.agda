@@ -3,10 +3,52 @@ module Test.Cases where
 open import Agda.Builtin.Nat
 open import Agda.Builtin.String
 open import Agda.Builtin.List
+open import Agda.Builtin.Equality
+open import Agda.Primitive
 
 open import Map.Construction
 open import Map.Map
 
+private variable
+  ℓa ℓb : Level
+  A : Set ℓa
+  B : Set ℓb
+  x y z : A
+
+-- Equality combinators
+transport
+  : A ≡ B
+  → A → B
+transport refl a = a
+
+_∵_
+  : A
+  → A ≡ B
+  →     B
+a ∵ pf = transport pf a
+
+cong 
+  : (f : A → B)
+  →   x ≡   y
+  → f x ≡ f y
+cong _ refl = refl
+
+_under_
+  : (  x ≡   y) → (f : A → B)
+  → (f x ≡ f y)
+pf under f = cong f pf
+
+sym
+  : x ≡ y
+  → y ≡ x
+sym refl = refl
+
+trans : x ≡ y
+      →     y ≡ z
+      → x ≡     z
+trans refl y=z = y=z
+
+-- Test cases
 KV5a = 5 , "a"
 KV5aUpdate = 5 , "5:a"
 KV3b = 3 , "b"
