@@ -23,8 +23,7 @@ foldrIsElems (node x k v l r) = cong (λ inner → foldr _∷_ inner l) (cong (v
 
 elemsIsFoldr : {{Comparable K}} → ∀{x} → (k : K) → (v : A) → (l : Map K A) → (r : Map K A)
     → elems (node x k v l r) ≡ foldr _∷_ (v ∷ foldr _∷_ [] r) l
-elemsIsFoldr k v l tip = {!   !}
-elemsIsFoldr k v l (node x x₁ x₂ r r₁) = {!   !}
+elemsIsFoldr k v l r = refl
 
 mutual
     foldrListFoldr : {{Comparable K}} → (f : A → V → V) → (z : V) → (v : A) → (l : Map K A) → (r : Map K A) 
@@ -35,7 +34,7 @@ mutual
     foldrTest : {{Comparable K}} → (f : A → V → V) → (z : V) → (m : Map K A) 
         → foldr f z m ≡ foldrList f z (elems m)
     foldrTest f z tip = refl
-    foldrTest f z (node x k v l r) = {! foldrListFoldr f z v l r  !}
+    foldrTest f z (node x k v l r) = foldrListFoldr f z v l r
 
 
 --foldrFoldr : {{Comparable K}} → (f : A → V → V) → (z : V) → (m : Map K A) → foldrList f z (foldr _∷_ [] m) ≡ foldrList f z (elems m)
@@ -90,4 +89,4 @@ testFoldlWithKey (node x x₁ x₂ m m₁) = trans {!   !} {!   !}
 --_ : {M : Set} → {{Monoid M}} → {f : K → A → M} → foldMapWithKey f m ≡ {!   !}
 -- _ = {!   !}
     
--- TO DO: add tests for the strict folds. Are they the same as the above??  
+-- TO DO: add tests for the strict folds. Are they the same as the above??   
