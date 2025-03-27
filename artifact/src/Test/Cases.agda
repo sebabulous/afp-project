@@ -17,9 +17,9 @@ data ProofAnd (p₁ : Set) (p₂ : Set) : Set where
 infixl 3 _∧_
 
 data _∈_ {K : Set} (a : A) : Map K A (suc n) → Set where
-  here : ∀{s k l r} → a ∈ node s k a l r
-  thereL : ∀{s k r a'} → {l : Map K A (suc m)} → a ∈ l → a ∈ (node s k a' l r)
-  thereR : ∀{s k l a'} → {r : Map K A (suc m)} → a ∈ r → a ∈ (node s k a' l r)
+  here : ∀{s k m n}{l : Map K A m}{r : Map K A n} → a ∈ node s k a l r
+  thereL : ∀{s k n a'} → {l : Map K A (suc m)}{r : Map K A n} → a ∈ l → a ∈ (node s k a' l r)
+  thereR : ∀{s k m a'} → {l : Map K A m}{r : Map K A (suc n)} → a ∈ r → a ∈ (node s k a' l r)
 
 
 KV5a = 5 , "a"

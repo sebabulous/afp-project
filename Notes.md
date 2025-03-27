@@ -5,4 +5,5 @@
 * Enforce that l-keys are smaller and r-keys are larger?
 * Functions we couldn't figure out
 * hyperfine (can we define a main function?) https://github.com/sharkdp/hyperfine
-* When hand in report?
+
+\because

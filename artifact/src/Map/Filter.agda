@@ -1,12 +1,14 @@
 module Map.Filter where
 
 open import Agda.Builtin.Maybe
+open import Agda.Builtin.Sigma
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 open import Agda.Builtin.List
 
 open import Map.Balance
 open import Map.Construction
+open import Map.Query
 open import Map.Map
 
 data Either (A B : Set) : Set where
@@ -18,23 +20,27 @@ private variable
   m n : Nat
 
 -- https://agda.github.io/agda-stdlib/v2.1/Data.Vec.html
-record Map≤ (K : Set) (A : Set) (n : Nat) : Set where
-  field
-    {mapLen} : Nat
-    map : Map K A mapLen
-    .bound : mapLen < n
+-- record Map≤ (K : Set) (A : Set) (n : Nat) : Set where
+--   field
+--     {mapLen} : Nat
+--     map : Map K A mapLen
+--     .bound : mapLen < n
 
--- filterWithKey : {{Comparable K}} → (K → A → Bool) → Map K A n → Map K A m
--- filterWithKey _ tip = tip
--- filterWithKey p (node _ kx x l r) with p kx x
--- ...                               | true = link kx x (filterWithKey p l) (filterWithKey p r)
--- ...                               | false = link2 (filterWithKey p l) (filterWithKey p r)
+filterWithKey : {{Comparable K}} → (K → A → Bool) → Map K A n → Σ Nat (Map K A)
+filterWithKey _ tip = zero , tip
+filterWithKey p (node _ kx x l r) with p kx x
+... | true with filterWithKey p l
+...   | record {fst = ls ; snd = lm} with filterWithKey p r
+...     | record {fst = rs ; snd = rm} = record {fst = suc (ls + rs) ; snd = link kx x lm rm}
+filterWithKey p (node _ kx x l r) | false with filterWithKey p l
+...   | record {fst = ls ; snd = lm} with filterWithKey p r
+...     | record {fst = rs ; snd = rm} = record {fst = ls + rs ; snd = link2 lm rm}
 
--- filter : {{Comparable K}} → (A → Bool) → Map K A → Map K A
--- filter p m = filterWithKey (λ _ x → p x) m
+filter : {{Comparable K}} → (A → Bool) → Map K A n → Σ Nat (Map K A)
+filter p m = filterWithKey (λ _ x → p x) m
 
--- filterKeys : {{Comparable K}} → (K → Bool) → Map K A → Map K A
--- filterKeys p m = filterWithKey (λ k _ → p k) m
+filterKeys : {{Comparable K}} → (K → Bool) → Map K A n → Σ Nat (Map K A)
+filterKeys p m = filterWithKey (λ k _ → p k) m
 
 -- -- restrictKeys : {{Comparable K}} → Map K A → Set K → Map K A
 

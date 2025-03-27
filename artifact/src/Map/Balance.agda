@@ -30,6 +30,8 @@ cong f refl = refl
 +suc {m = zero} = refl
 +suc {m = suc m} = cong suc +suc
 
+-- {-# REWRITE +zero +suc #-}
+
 +associative : m + (m1 + n1) ≡ m + m1 + n1
 +associative {m = zero} = refl
 +associative {m = suc m} = cong suc (+associative {m = m})
@@ -80,8 +82,8 @@ balance k v tip r@(node _ rk rv tip rr@(node _ _ _ _ _)) = node 3 rk rv (node 1 
 -- balance k v tip (node _ rk rv (node _ rlk rlv _ _) tip) = node 3 rlk rlv (node 1 k v tip tip) (node 1 rk rv tip tip)
 balance k v tip (node _ rk rv (node _ rlk rlv _ _) tip) = {! This does not make sense  !}
 balance k v tip (node rs rk rv rl@(node rls rlk rlv rll rlr) rr@(node rrs _ _ _ _)) with compare rls (ratio * rrs)
-...                                                                                 | lt = node (1 + rs) rk rv (node (1 + rls) k v tip rl) rr
-...                                                                                 | _ = node (1 + rs) rlk rlv (node (1 + size rll) k v tip rll) (node (1 + rrs + size rlr) rk rv rlr rr)
+... | lt = node (1 + rs) rk rv (node (1 + rls) k v tip rl) rr
+... | _ = node (1 + rs) rlk rlv (node (1 + size rll) k v tip rll) (node (1 + rrs + size rlr) rk rv rlr rr)
 
 balance k v l@(node ls lk lv tip tip) tip = node 2 k v l tip
 -- balance k v (node ls lk lv tip (node _ lrk lrv _ _)) tip = node 3 lrk lrv (node 1 lk lv tip tip) (node 1 k v tip tip)
