@@ -15,58 +15,30 @@ private variable
     V K A : Set
     z : V
 
+-- foldrList f z (foldr _∷_ ( x :: xs) l)
+-- foldrList f z (x ∷ (foldr _∷_ xs l))
+-- f x (foldrList f z (foldr _∷_ xs l))
+-- f x (foldrList f (foldrList f z l) xs)   Induction
+-- foldrList f (foldrList f z l) (x :: xs)
 
-foldrIsElems : {{Comparable K}} → (m : Map K A) 
-    → foldr _∷_ [] m ≡ elems m
-foldrIsElems tip = refl
-foldrIsElems (node x k v l r) = cong (λ inner → foldr _∷_ inner l) (cong (v ∷_) (foldrIsElems r))
+help1 : {{Comparable K}} → (f : A → V → V) → (z : V) → (l : Map K A) → (x : A) → (xs : List A) 
+   → foldrList f z (foldr _∷_ (x ∷ xs) l) ≡ f x (foldrList f z (foldr _∷_ xs l))
+help1 f z l x xs = trans {!   !} -- foldr _∷_ (x ∷ xs) l becomes x ∷ (foldr _∷_ xs l)
+    {!   !} -- Definition foldrList
 
-elemsIsFoldr : {{Comparable K}} → ∀{x} → (k : K) → (v : A) → (l : Map K A) → (r : Map K A)
-    → elems (node x k v l r) ≡ foldr _∷_ (v ∷ foldr _∷_ [] r) l
-elemsIsFoldr k v l r = refl
-
-mutual
-    foldrListFoldr : {{Comparable K}} → (f : A → V → V) → (z : V) → (v : A) → (l : Map K A) → (r : Map K A) 
-        → foldr f (f v (foldr f z r)) l ≡ foldrList f z (foldr _∷_ (v ∷ foldr _∷_ [] r) l)
-    foldrListFoldr f z v tip r = cong (λ y → f v y) (trans (foldrTest f z r) (sym (cong (λ y → foldrList f z y) (foldrIsElems r))))
-    foldrListFoldr f z v (node x kₗ vₗ lₗ rₗ) r = {!  !}
-
-    foldrTest : {{Comparable K}} → (f : A → V → V) → (z : V) → (m : Map K A) 
-        → foldr f z m ≡ foldrList f z (elems m)
-    foldrTest f z tip = refl
-    foldrTest f z (node x k v l r) = foldrListFoldr f z v l r
-
-
---foldrFoldr : {{Comparable K}} → (f : A → V → V) → (z : V) → (m : Map K A) → foldrList f z (foldr _∷_ [] m) ≡ foldrList f z (elems m)
---foldrFoldr f z m = cong (λ lst → foldrList f z lst) (foldIsElems m)
-
-
-
-foldrThing : {{Comparable K}} → (f : A → V → V) → (z : V) → (k : K) → (v : A) → (l : Map K A) → (r : Map K A) 
-    → foldr f (f v (foldr f z r)) l ≡ foldrList f z (foldr _∷_ (v ∷ foldr _∷_ [] r) l)
-foldrThing f z k v tip r = {! foldrIsElems r  !}
-foldrThing f z k v (node x x₁ x₂ l l₁) r = {!   !}
+foldrThing : {{Comparable K}} → (f : A → V → V) → (z : V) → (l : Map K A) → (xs : List A) 
+    → foldrList f z (foldr _∷_ xs l) ≡ foldrList f (foldrList f z xs) (elems l)
+foldrThing f z l [] = refl
+foldrThing f z l (x ∷ xs) = trans (help1 f z l x xs) 
+     (trans (cong (λ y → f x y) (foldrThing f z l xs)) 
+     {!   !}) -- Defintion of foldrList
 
 -- foldr f z == foldr f z . elems
 testFoldr : {{Comparable K}} → (f : A → V → V) → (z : V) → (m : Map K A) → foldr f z m ≡ foldrList f z (elems m)
 testFoldr f z tip = refl
---testFoldr f z (node x k v l r) = {! cong (λ lst → foldrList f z lst) (foldIsElems (node x k v l r)) !}
-testFoldr f z (node x k v l r) = {! foldrIsElems (node x k v l r) !}
---testFoldr f z (node x k v l r) = {! (testFoldr f z r)  !}
---testFoldr f z (node x k v l r) = {! cong (λ inner → foldr f inner l) (cong (λ a → f v a) (testFoldr f z r))  !}
-{-
-testFoldr f z tip = refl
-testFoldr f z (node x x₁ x₂ m m₁) = 
-    trans (testFoldr f (f x₂ (foldr f z m₁)) m) 
-    (trans (cong (λ y → foldrList f (f x₂ y) (elems m)) (testFoldr f z m₁)) 
-    (trans {!   !} {!   !})) 
-    -- foldrList f (f x₂ (foldr f z m₁)) (elems m) ≡ 
-    -- foldrList f (f x₂ (foldrList f z (elems m₁))) (elems m) ≡
-    -- foldrList f (foldrList f z (x₂ ∷ (elems m₁))) (elems m)  
-    -- 
-    -- foldrList f z (foldr _∷_ [] (node x x₁ x₂ m m₁))
-    -- foldrList f z (elems (node x x₁ x₂ m m₁))
--}
+testFoldr f z (node x k v l r) = trans (testFoldr f (f v (foldr f z r)) l) 
+     (trans (cong (λ y → foldrList f (f v y) (elems l)) (testFoldr f z r))  
+     (trans (sym(foldrThing f z l (v ∷ elems r))) refl))                                         
 
 -- foldl f z == foldl f z . elems
 testFoldl : {{Comparable K}} → (f : V → A → V) → (z : V) → (m : Map K A) → foldl f z m ≡ foldlList f z (elems m)
@@ -88,5 +60,5 @@ testFoldlWithKey (node x x₁ x₂ m m₁) = trans {!   !} {!   !}
 -- foldMapWithKey f = fold . mapWithKey f
 --_ : {M : Set} → {{Monoid M}} → {f : K → A → M} → foldMapWithKey f m ≡ {!   !}
 -- _ = {!   !}
-    
--- TO DO: add tests for the strict folds. Are they the same as the above??   
+        
+-- TO DO: add tests for the strict folds. Are they the same as the above??     
