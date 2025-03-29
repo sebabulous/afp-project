@@ -26,40 +26,62 @@ id≡++[] : (as : List A) → as ++ [] ≡ as
 id≡++[] [] = refl
 id≡++[] (x ∷ as) = cong (x ∷_) (id≡++[] as)
 
-elems≡elems : {{Comparable K}} → ∀ x k → (v : A) → (l : Map K A) → (r : Map K A)
-    → elems (node x k v l r) ≡ elems l ++ (v ∷ elems r)
-elems≡elems x k v l r = {!   !}
+mutual
+    elems≡elems1 : {{Comparable K}} → (v : A) → (l : Map K A) → (r : Map K A)
+        → foldrList _∷_ (v ∷ elems r) (elems l) ≡ foldrList _∷_ (v ∷ (foldrList _∷_ [] (elems r))) (elems l)
+    elems≡elems1 v l r =  cong (λ y → foldrList _∷_ (v ∷ y) (elems l)) (foldr≡foldrList-elems _∷_ [] r)
 
-foldrList-v-r : (f : A → V → V) → (z : V) → (v : A) → (r : Map K A)
-    → foldrList f z (v ∷ elems r) ≡ f v (foldrList f z (elems r))
-foldrList-v-r f z v r = refl
+    foldrIdent : (as : List A)
+        → foldrList _∷_ [] as ≡ as
+    foldrIdent [] = refl
+    foldrIdent (x ∷ as) = cong (x ∷_) (foldrIdent as)
 
-foldrList-split : (f : A → V → V) → (z : V) → (ls : List A) → (rs : List A)
-    → foldrList f z (ls ++ rs) ≡ foldrList f (foldrList f z rs) ls
-foldrList-split f z [] rs = refl
-foldrList-split f z (x ∷ ls) rs = cong (f x) (foldrList-split f z ls rs)
-
-elemsthing : {{Comparable K}} → (f : A → V → V) → (z : V) → ∀ x k → (v : A) → (l : Map K A) → (r : Map K A)
-    → foldrList f z (elems (node x k v l r)) ≡ foldrList f (f v (foldrList f z (elems r))) (elems l)
-elemsthing f z x k v l r = trans
-    (cong (foldrList f z) (elems≡elems  x k v l r)) 
-    (foldrList-split f z (elems l) (v ∷ elems r))
-
-foldr≡foldrList-elems : {{Comparable K}} → (f : A → V → V) → (z : V) → (m : Map K A)
-    → foldr f z m ≡ foldrList f z (elems m)
-foldr≡foldrList-elems f z tip = refl
-foldr≡foldrList-elems f z (node x k v l r) = trans
-    (
-        trans
+    elems≡elems : {{Comparable K}} → ∀ x k → (v : A) → (l : Map K A) → (r : Map K A)
+        → elems (node x k v l r) ≡ elems l ++ (v ∷ elems r)
+    elems≡elems x k v l r = trans
         (
-            cong (λ y → foldr f y l)
-            (cong (f v) (foldr≡foldrList-elems f z r))
+            trans
+            (
+                trans
+                (foldr≡foldrList-elems _∷_ (v ∷ elems r) l)
+                (elems≡elems1 v l r)
+            )
+            (
+                sym (foldrList-split _∷_ [] (elems l) (v ∷ elems r))
+            )
         )
+        (foldrIdent (elems l ++ (v ∷ elems r)))
+
+    foldrList-v-r : (f : A → V → V) → (z : V) → (v : A) → (r : Map K A)
+        → foldrList f z (v ∷ elems r) ≡ f v (foldrList f z (elems r))
+    foldrList-v-r f z v r = refl
+
+    foldrList-split : (f : A → V → V) → (z : V) → (ls : List A) → (rs : List A)
+        → foldrList f z (ls ++ rs) ≡ foldrList f (foldrList f z rs) ls
+    foldrList-split f z [] rs = refl
+    foldrList-split f z (x ∷ ls) rs = cong (f x) (foldrList-split f z ls rs)
+
+    elemsthing : {{Comparable K}} → (f : A → V → V) → (z : V) → ∀ x k → (v : A) → (l : Map K A) → (r : Map K A)
+        → foldrList f z (elems (node x k v l r)) ≡ foldrList f (f v (foldrList f z (elems r))) (elems l)
+    elemsthing f z x k v l r = trans
+        (cong (foldrList f z) (elems≡elems  x k v l r)) 
+        (foldrList-split f z (elems l) (v ∷ elems r))
+
+    foldr≡foldrList-elems : {{Comparable K}} → (f : A → V → V) → (z : V) → (m : Map K A)
+        → foldr f z m ≡ foldrList f z (elems m)
+    foldr≡foldrList-elems f z tip = refl
+    foldr≡foldrList-elems f z (node x k v l r) = trans
         (
-            foldr≡foldrList-elems f (f v (foldrList f z (elems r))) l
+            trans
+            (
+                cong (λ y → foldr f y l)
+                (cong (f v) (foldr≡foldrList-elems f z r))
+            )
+            (
+                foldr≡foldrList-elems f (f v (foldrList f z (elems r))) l
+            )
         )
-    )
-    (sym (elemsthing f z x k v l r))
+        (sym (elemsthing f z x k v l r))
 
 
 -- elems (node x k v l r)
