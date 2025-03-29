@@ -48,6 +48,23 @@ trans : x ≡ y
       → x ≡     z
 trans refl y=z = y=z
 
+_≡⟨_⟩_ : ∀ p {q r : A} → p ≡ q → q ≡ r → p ≡ r
+x ≡⟨ x=y ⟩ y=z = trans x=y y=z
+
+_∎ : (a : A) → a ≡ a
+a ∎ = refl
+
+_++_ : (l : List A) → (r : List A) → List A
+[] ++ r = r
+(x ∷ l) ++ r = x ∷ l ++ r
+
+[]++≡id : (as : List A) → [] ++ as ≡ as
+[]++≡id as = refl
+
+id≡++[] : (as : List A) → as ++ [] ≡ as
+id≡++[] [] = refl
+id≡++[] (x ∷ as) = cong (x ∷_) (id≡++[] as)
+
 -- Test cases
 KV5a = 5 , "a"
 KV5aUpdate = 5 , "5:a"
