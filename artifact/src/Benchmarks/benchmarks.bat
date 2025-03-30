@@ -1,6 +1,6 @@
 @echo off
 setlocal EnableDelayedExpansion
-set agdahyperfinepath="./artifact/src/Test/"
+set agdahyperfinepath=./artifact/src/Test/
 set agdahyperfinecmd=hyperfine --runs 100 --show-output
 for %%f in (%agdahyperfinepath%*) do (
     echo %%f
