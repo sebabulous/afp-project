@@ -120,29 +120,37 @@ testFoldlWithKey f z (node x k v l r) =
     (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList (node x k v l r)) ∎))))) 
 
 mappend≡foldrMappend : (x : Map K Nat) → (y : Nat) → foldr mappend y x ≡ mappend (fold x) y  
-mappend≡foldrMappend x zero = {!   !}
-mappend≡foldrMappend x (suc y) = cong {!   !} (mappend≡foldrMappend x y)
+mappend≡foldrMappend tip x = refl
+mappend≡foldrMappend (node n k v l r) x = 
+    foldr mappend x (node n k v l r) 
+        ≡⟨ cong (λ y → foldr mappend (mappend v y) l) (mappend≡foldrMappend r x) ⟩ 
+    (foldr mappend (mappend v (mappend (fold r) x)) l 
+        ≡⟨ mappend≡foldrMappend l (mappend v (mappend (fold r) x)) ⟩ 
+    (mappend (fold l) (mappend v (mappend (fold r) x)) 
+        ≡⟨ {!   !} ⟩ 
+    (mappend (mappend (fold l) (mappend v (fold r))) x 
+        ≡⟨ cong (λ y → mappend y x) (sym (mappend≡foldrMappend l (mappend v (fold r)))) ⟩  
+    (mappend (fold (node n k v l r)) x ∎))))
+
+mappendZeroY≡mappendYZero : (x : Nat) → mappend zero x ≡ mappend x zero
+mappendZeroY≡mappendYZero zero = refl
+mappendZeroY≡mappendYZero (suc n) = cong suc (mappendZeroY≡mappendYZero n)
 
 -- foldMapWithKey f = fold . mapWithKey f
 -- proof with Nat because that is an instance of monoid
 proofFoldMapWithKey : (f : K → V → Nat) → (m : Map K V) -- {K V M : Set} → {{Monoid M}} → (K → V → M) → Map K V → M 
     → foldMapWithKey f m ≡ fold (mapWithKey f m)
 proofFoldMapWithKey f tip = refl
-proofFoldMapWithKey f (node 1 k v l r) = {!   !} 
--- f k v ≡ ... ≡ mappend (f k v) zero ≡ 
--- mappend (f k v) (foldr mappend zero tip) ≡ foldr mappend (mappend (f k v) (foldr mappend zero tip)) tip ≡ 
--- foldr mappend zero (node 1 k (f k v) tip tip) ≡ fold (node 1 k (f k v) tip tip) ≡ fold (mapWithKey f m)
+proofFoldMapWithKey f (node 1 k v tip tip) = mappendZeroY≡mappendYZero (f k v)
 proofFoldMapWithKey f (node n k v l r) = 
     foldMapWithKey f (node n k v l r) 
-        ≡⟨ {!   !} ⟩ 
+        ≡⟨ {!   !} ⟩ -- definition foldMap
     (mappend (foldMapWithKey f l) (mappend (f k v) (foldMapWithKey f r)) 
         ≡⟨ cong (mappend (foldMapWithKey f l)) (cong (mappend (f k v)) (proofFoldMapWithKey f r)) ⟩ 
     (mappend (foldMapWithKey f l) (mappend (f k v) (fold (mapWithKey f r))) 
         ≡⟨ cong (λ y → mappend y (mappend (f k v) (fold (mapWithKey f r)))) (proofFoldMapWithKey f l) ⟩ 
     (mappend (fold (mapWithKey f l)) (mappend (f k v) (fold (mapWithKey f r)))
         ≡⟨ sym (mappend≡foldrMappend (mapWithKey f l) (mappend (f k v) (fold (mapWithKey f r)))) ⟩ 
-    (foldr mappend (mappend (f k v) (fold (mapWithKey f r))) (mapWithKey f l) 
-        ≡⟨ refl ⟩ 
-    (fold (mapWithKey f (node n k v l r)) ∎)))))
- 
--- TO DO: add tests for the strict folds. Are they the same as the above??     
+    (fold (mapWithKey f (node n k v l r)) ∎))))
+     
+-- TO DO: add tests for the strict folds. Are they the same as the above??      

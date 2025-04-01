@@ -30,15 +30,17 @@ _ = refl
 
 -- %%%%%%%%%%%%%%%%%%%%%%%%% Lookup functions %%%%%%%%%%%%%%%%%%%%%%%%%
 
--- TO DO: write tests lookup
+_ : lookup 4 test35 ≡ nothing
+_ = refl
+
+_ : lookup (Pair.fst KV5a) test35 ≡ just (Pair.snd KV5a)
+_ = refl
 
 _ : test53 !? 1 ≡ nothing
 _ = refl
 
 _ : test53 !? Pair.fst KV5a ≡ just (Pair.snd KV5a)
 _ = refl
-
--- TO DO: write test ! of error
 
 _ : test53 ! Pair.fst KV5a ≡ Pair.snd KV5a
 _ = refl

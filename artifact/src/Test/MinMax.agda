@@ -28,8 +28,6 @@ _ = refl
 _ : findMax test53 ≡ KV5a
 _ = refl
 
--- Test error findMin and findMax
-
 _ : deleteMin test537 ≡ test57
 _ = refl
 
