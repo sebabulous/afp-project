@@ -42,25 +42,25 @@ _ = refl
 _ : deleteFindMax test537 ≡ KV7c , test53
 _ = refl
 
-_ : updateMin (λ a -> just (primStringAppend "3:"  a)) test53 ≡ test35update3
+_ : updateMin (λ a -> just (primStringAppend "3:"  a)) test35 ≡ test35update3
 _ = refl
 
 _ : updateMin (λ a -> nothing) test53 ≡ singleton (Pair.fst KV5a) (Pair.snd KV5a)
 _ = refl
 
-_ : updateMax (λ a -> just (primStringAppend "5:"  a)) test53 ≡ test35update5
+_ : updateMax (λ a -> just (primStringAppend "5:"  a)) test35 ≡ test35update5
 _ = refl
 
 _ : updateMax (λ a -> nothing) test53 ≡ singleton (Pair.fst KV3b) (Pair.snd KV3b)
 _ = refl
 
-_ : updateMinWithKey (\ k a -> just (primStringAppend (primShowNat k) (primStringAppend ":" a))) test53 ≡ test35update3
+_ : updateMinWithKey (\ k a -> just (primStringAppend (primShowNat k) (primStringAppend ":" a))) test35 ≡ test35update3
 _ = refl
 
 _ : updateMinWithKey (\ _ _ -> nothing) test53 ≡ singleton (Pair.fst KV5a) (Pair.snd KV5a)
 _ = refl
 
-_ : updateMaxWithKey (\ k a -> just (primStringAppend (primShowNat k) (primStringAppend ":" a))) test53 ≡ test35update5
+_ : updateMaxWithKey (\ k a -> just (primStringAppend (primShowNat k) (primStringAppend ":" a))) test35 ≡ test35update5
 _ = refl
 
 _ : updateMaxWithKey (\ _ _ -> nothing) test53 ≡ singleton (Pair.fst KV3b) (Pair.snd KV3b)
