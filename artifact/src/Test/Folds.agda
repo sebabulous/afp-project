@@ -80,9 +80,9 @@ mutual
             → toAscList (node x k v l r) ≡ toAscList l ++ ((k , v) ∷ toAscList r) 
     toAscList≡toAscList x k v l r = 
         toAscList (node x k v l r) 
-            ≡⟨ testFoldrWithKey ((λ k v kvs → (k , v) ∷ kvs)) ((k , v) ∷ toAscList r) l ⟩ 
+            ≡⟨ foldrWithKey≡foldr ((λ k v kvs → (k , v) ∷ kvs)) ((k , v) ∷ toAscList r) l ⟩ 
         (foldrList (λ p kvs → (Pair.fst p , Pair.snd p) ∷ kvs) ((k , v) ∷ toAscList r) (toAscList l) 
-            ≡⟨ cong (λ y → foldrList _∷_ ((k , v) ∷ y) (toAscList l)) (testFoldrWithKey (λ k v kvs → (k , v) ∷ kvs) [] r) ⟩ 
+            ≡⟨ cong (λ y → foldrList _∷_ ((k , v) ∷ y) (toAscList l)) (foldrWithKey≡foldr (λ k v kvs → (k , v) ∷ kvs) [] r) ⟩ 
         (foldrList _∷_ ((k , v) ∷ foldrList (λ p kvs → (Pair.fst p , Pair.snd p) ∷ kvs) [] (toAscList r)) (toAscList l) 
             ≡⟨ sym (foldrList-split _∷_ [] (toAscList l) ((k , v) ∷ toAscList r)) ⟩ 
         (foldrList _∷_ [] (toAscList l ++ ((k , v) ∷ toAscList r)) 
@@ -90,14 +90,14 @@ mutual
         ((toAscList l ++ ((k , v) ∷ toAscList r)) ∎)))) 
 
     -- foldrWithKey f z == foldr (uncurry f) z . toAscList
-    testFoldrWithKey : {{Comparable K}} → (f : K → A → V → V) → (z : V) → (m : Map K A) 
+    foldrWithKey≡foldr : {{Comparable K}} → (f : K → A → V → V) → (z : V) → (m : Map K A) 
         → foldrWithKey f z m ≡ foldrList (λ p x → f (Pair.fst p) (Pair.snd p) x) z (toAscList m)
-    testFoldrWithKey f z tip = refl
-    testFoldrWithKey f z (node x k v l r) = 
+    foldrWithKey≡foldr f z tip = refl
+    foldrWithKey≡foldr f z (node x k v l r) = 
         foldrWithKey f z (node x k v l r) 
-            ≡⟨ cong (λ y → foldrWithKey f y l) (cong (f k v) (testFoldrWithKey f z r)) ⟩ 
+            ≡⟨ cong (λ y → foldrWithKey f y l) (cong (f k v) (foldrWithKey≡foldr f z r)) ⟩ 
         (foldrWithKey f (f k v (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (toAscList r))) l 
-            ≡⟨ testFoldrWithKey f (f k v (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (toAscList r))) l ⟩ 
+            ≡⟨ foldrWithKey≡foldr f (f k v (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (toAscList r))) l ⟩ 
         (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) (f k v (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (toAscList r))) (toAscList l) 
             ≡⟨ sym (foldrList-split ((λ p → f (Pair.fst p) (Pair.snd p))) z (toAscList l) ((k , v) ∷ toAscList r)) ⟩ 
         (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (toAscList l ++ ((k , v) ∷ toAscList r)) 
@@ -105,19 +105,24 @@ mutual
         (foldrList (λ p x → f (Pair.fst p) (Pair.snd p) x) z (toAscList (node x k v l r)) ∎)))) 
 
 -- foldlWithKey f z == foldl (\z' (kx, x) -> f z' kx x) z . toAscList
-testFoldlWithKey : {{Comparable K}} → (f : V → K → A → V) → (z : V) → (m : Map K A) 
+foldlWithKey≡foldl : {{Comparable K}} → (f : V → K → A → V) → (z : V) → (m : Map K A) 
     → foldlWithKey f z m ≡ foldlList (λ x p → f x (Pair.fst p) (Pair.snd p)) z (toAscList m)
-testFoldlWithKey f z tip = refl
-testFoldlWithKey f z (node x k v l r) = 
+foldlWithKey≡foldl f z tip = refl
+foldlWithKey≡foldl f z (node x k v l r) = 
     foldlWithKey f z (node x k v l r) 
-        ≡⟨ cong (λ y → foldlWithKey f y r) (cong (λ y → f y k v) (testFoldlWithKey f z l)) ⟩ 
+        ≡⟨ cong (λ y → foldlWithKey f y r) (cong (λ y → f y k v) (foldlWithKey≡foldl f z l)) ⟩ 
     ((foldlWithKey f (f (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList l)) k v) r 
-        ≡⟨ testFoldlWithKey f (f (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList l)) k v) r ⟩ 
+        ≡⟨ foldlWithKey≡foldl f (f (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList l)) k v) r ⟩ 
     (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) (f (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList l)) k v) (toAscList r) 
         ≡⟨ sym (foldlList-split (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList l) ((k , v) ∷ toAscList r)) ⟩ 
     (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList l ++ ((k , v) ∷ toAscList r)) 
     ≡⟨ sym (cong (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z) (toAscList≡toAscList x k v l r)) ⟩ 
     (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList (node x k v l r)) ∎))))) 
+
+assoc-mappend : (xs ys zs : Nat)
+         → mappend xs (mappend ys zs) ≡ mappend (mappend xs ys) zs 
+assoc-mappend zero ys zs = refl
+assoc-mappend (suc xs) ys zs = cong suc (assoc-mappend xs ys zs)
 
 mappend≡foldrMappend : (x : Map K Nat) → (y : Nat) → foldr mappend y x ≡ mappend (fold x) y  
 mappend≡foldrMappend tip x = refl
@@ -127,10 +132,12 @@ mappend≡foldrMappend (node n k v l r) x =
     (foldr mappend (mappend v (mappend (fold r) x)) l 
         ≡⟨ mappend≡foldrMappend l (mappend v (mappend (fold r) x)) ⟩ 
     (mappend (fold l) (mappend v (mappend (fold r) x)) 
-        ≡⟨ {!   !} ⟩ 
+        ≡⟨ cong (mappend (fold l)) (assoc-mappend v (fold r) x) ⟩ 
+    (mappend (fold l) (mappend (mappend v (fold r)) x) 
+        ≡⟨ assoc-mappend (fold l) (mappend v (fold r)) x ⟩ 
     (mappend (mappend (fold l) (mappend v (fold r))) x 
         ≡⟨ cong (λ y → mappend y x) (sym (mappend≡foldrMappend l (mappend v (fold r)))) ⟩  
-    (mappend (fold (node n k v l r)) x ∎))))
+    (mappend (fold (node n k v l r)) x ∎)))))
 
 mappendZeroY≡mappendYZero : (x : Nat) → mappend zero x ≡ mappend x zero
 mappendZeroY≡mappendYZero zero = refl
@@ -138,19 +145,19 @@ mappendZeroY≡mappendYZero (suc n) = cong suc (mappendZeroY≡mappendYZero n)
 
 -- foldMapWithKey f = fold . mapWithKey f
 -- proof with Nat because that is an instance of monoid
-proofFoldMapWithKey : (f : K → V → Nat) → (m : Map K V) -- {K V M : Set} → {{Monoid M}} → (K → V → M) → Map K V → M 
+foldMapWithKey≡foldMapWithKey : (f : K → V → Nat) → (m : Map K V) -- {K V M : Set} → {{Monoid M}} → (K → V → M) → Map K V → M 
     → foldMapWithKey f m ≡ fold (mapWithKey f m)
-proofFoldMapWithKey f tip = refl
-proofFoldMapWithKey f (node 1 k v tip tip) = mappendZeroY≡mappendYZero (f k v)
-proofFoldMapWithKey f (node n k v l r) = 
+foldMapWithKey≡foldMapWithKey f tip = refl
+foldMapWithKey≡foldMapWithKey f (node 1 k v tip tip) = mappendZeroY≡mappendYZero (f k v)
+foldMapWithKey≡foldMapWithKey f (node n k v l r) = 
     foldMapWithKey f (node n k v l r) 
         ≡⟨ {!   !} ⟩ -- definition foldMap
     (mappend (foldMapWithKey f l) (mappend (f k v) (foldMapWithKey f r)) 
-        ≡⟨ cong (mappend (foldMapWithKey f l)) (cong (mappend (f k v)) (proofFoldMapWithKey f r)) ⟩ 
+        ≡⟨ cong (mappend (foldMapWithKey f l)) (cong (mappend (f k v)) (foldMapWithKey≡foldMapWithKey f r)) ⟩ 
     (mappend (foldMapWithKey f l) (mappend (f k v) (fold (mapWithKey f r))) 
-        ≡⟨ cong (λ y → mappend y (mappend (f k v) (fold (mapWithKey f r)))) (proofFoldMapWithKey f l) ⟩ 
+        ≡⟨ cong (λ y → mappend y (mappend (f k v) (fold (mapWithKey f r)))) (foldMapWithKey≡foldMapWithKey f l) ⟩ 
     (mappend (fold (mapWithKey f l)) (mappend (f k v) (fold (mapWithKey f r)))
         ≡⟨ sym (mappend≡foldrMappend (mapWithKey f l) (mappend (f k v) (fold (mapWithKey f r)))) ⟩ 
     (fold (mapWithKey f (node n k v l r)) ∎))))
-     
+      
 -- TO DO: add tests for the strict folds. Are they the same as the above??      
