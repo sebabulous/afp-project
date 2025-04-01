@@ -10,9 +10,10 @@ open import Map.Folds
 open import Map.Construction
 open import Map.Conversion
 open import Map.Map
+open import Map.Traversal
 
 private variable
-    V K A : Set
+    V K A M : Set
     z : V
 
 foldrIdent : (as : List A)
@@ -75,7 +76,6 @@ foldl≡foldlList-elems f z (node x k v l r) =
     (foldlList f z (elems (node x k v l r)) ∎)))))) 
 
 mutual 
-    -- foldrWithKey (λ k v kvs → (k , v) ∷ kvs) []
     toAscList≡toAscList : {{Comparable K}} → ∀ x k → (v : A) → (l : Map K A) → (r : Map K A)
             → toAscList (node x k v l r) ≡ toAscList l ++ ((k , v) ∷ toAscList r) 
     toAscList≡toAscList x k v l r = 
@@ -119,8 +119,30 @@ testFoldlWithKey f z (node x k v l r) =
     ≡⟨ sym (cong (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z) (toAscList≡toAscList x k v l r)) ⟩ 
     (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList (node x k v l r)) ∎))))) 
 
+mappend≡foldrMappend : (x : Map K Nat) → (y : Nat) → foldr mappend y x ≡ mappend (fold x) y  
+mappend≡foldrMappend x zero = {!   !}
+mappend≡foldrMappend x (suc y) = cong {!   !} (mappend≡foldrMappend x y)
+
 -- foldMapWithKey f = fold . mapWithKey f
---_ : {M : Set} → {{Monoid M}} → {f : K → A → M} → foldMapWithKey f m ≡ {!   !}
--- _ = {!   !}
-         
+-- proof with Nat because that is an instance of monoid
+proofFoldMapWithKey : (f : K → V → Nat) → (m : Map K V) -- {K V M : Set} → {{Monoid M}} → (K → V → M) → Map K V → M 
+    → foldMapWithKey f m ≡ fold (mapWithKey f m)
+proofFoldMapWithKey f tip = refl
+proofFoldMapWithKey f (node 1 k v l r) = {!   !} 
+-- f k v ≡ ... ≡ mappend (f k v) zero ≡ 
+-- mappend (f k v) (foldr mappend zero tip) ≡ foldr mappend (mappend (f k v) (foldr mappend zero tip)) tip ≡ 
+-- foldr mappend zero (node 1 k (f k v) tip tip) ≡ fold (node 1 k (f k v) tip tip) ≡ fold (mapWithKey f m)
+proofFoldMapWithKey f (node n k v l r) = 
+    foldMapWithKey f (node n k v l r) 
+        ≡⟨ {!   !} ⟩ 
+    (mappend (foldMapWithKey f l) (mappend (f k v) (foldMapWithKey f r)) 
+        ≡⟨ cong (mappend (foldMapWithKey f l)) (cong (mappend (f k v)) (proofFoldMapWithKey f r)) ⟩ 
+    (mappend (foldMapWithKey f l) (mappend (f k v) (fold (mapWithKey f r))) 
+        ≡⟨ cong (λ y → mappend y (mappend (f k v) (fold (mapWithKey f r)))) (proofFoldMapWithKey f l) ⟩ 
+    (mappend (fold (mapWithKey f l)) (mappend (f k v) (fold (mapWithKey f r)))
+        ≡⟨ sym (mappend≡foldrMappend (mapWithKey f l) (mappend (f k v) (fold (mapWithKey f r)))) ⟩ 
+    (foldr mappend (mappend (f k v) (fold (mapWithKey f r))) (mapWithKey f l) 
+        ≡⟨ refl ⟩ 
+    (fold (mapWithKey f (node n k v l r)) ∎)))))
+ 
 -- TO DO: add tests for the strict folds. Are they the same as the above??     

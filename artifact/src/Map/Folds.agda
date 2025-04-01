@@ -1,5 +1,6 @@
 module Map.Folds where
 
+open import Agda.Builtin.Nat
 open import Agda.Builtin.Strict
 
 open import Map.Map
@@ -27,6 +28,10 @@ foldrWithKey f v (node s k v₁ l r) = foldrWithKey f (f k v₁ (foldrWithKey f 
 foldlWithKey : {V K A : Set} → (V → K → A → V) → V → Map K A → V
 foldlWithKey f v tip = v
 foldlWithKey f v (node s k v₁ l r) = foldlWithKey f (f (foldlWithKey f v l) k v₁) r
+
+-- fold : {{ Monoid m }} → t m -> m
+fold : {K : Set} → Map K Nat → Nat
+fold xs = foldr mappend mempty xs
 
 -- Fold the keys and values in the map using the given monoid, 
 -- such that foldMapWithKey f = fold . mapWithKey f

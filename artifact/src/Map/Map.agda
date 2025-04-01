@@ -2,6 +2,7 @@ module Map.Map where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
+open import Agda.Builtin.List
 open import Agda.Builtin.Equality
 
 _||_ : Bool → Bool → Bool
@@ -61,6 +62,12 @@ record Monoid (M : Set) : Set where
     mappend : M -> M -> M
 
 open Monoid {{...}} public
+
+instance
+  NatMonoid : Monoid Nat
+  mempty {{ NatMonoid }} = zero
+  mappend {{ NatMonoid }} zero n = n
+  mappend {{ NatMonoid }} (suc x) n = suc (mappend x n)
 
 data Map (K : Set) (V : Set) : Set where
   tip : Map K V
