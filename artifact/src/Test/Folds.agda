@@ -149,18 +149,16 @@ mappendZeroY≡mappendYZero (suc n) = (mappendZeroY≡mappendYZero n) under suc
 foldMapWithKey≡foldMapWithKey : (f : K → V → Nat) → (m : Map K V) -- {{Monoid M}} → (f : K → V → M) → (m : Map K V) 
     → foldMapWithKey f m ≡ fold (mapWithKey f m)
 foldMapWithKey≡foldMapWithKey f tip = refl
-foldMapWithKey≡foldMapWithKey f (node 0 k v l r) = {!   !}
-foldMapWithKey≡foldMapWithKey f (node 1 k v _ _) = {! mappendZeroY≡mappendYZero (f k v)  !}
+foldMapWithKey≡foldMapWithKey f (node 1 k v tip tip) = mappendZeroY≡mappendYZero (f k v)
 foldMapWithKey≡foldMapWithKey f (node (suc (suc n)) k v l r) = 
     foldMapWithKey f (node (suc (suc n)) k v l r) 
-        ≡⟨ refl ⟩ -- definition foldMap
-    (mappend (foldMapWithKey f l) (mappend (f k v) (foldMapWithKey f r)) 
         ≡⟨ ((foldMapWithKey≡foldMapWithKey f r) under (mappend (f k v))) under (mappend (foldMapWithKey f l)) ⟩ 
     (mappend (foldMapWithKey f l) (mappend (f k v) (fold (mapWithKey f r))) 
         ≡⟨ (foldMapWithKey≡foldMapWithKey f l) under (λ y → mappend y (mappend (f k v) (fold (mapWithKey f r)))) ⟩ 
     (mappend (fold (mapWithKey f l)) (mappend (f k v) (fold (mapWithKey f r)))
         ≡⟨ sym (mappend≡foldrMappend (mapWithKey f l) (mappend (f k v) (fold (mapWithKey f r)))) ⟩ 
-    (fold (mapWithKey f (node (suc (suc n)) k v l r)) ∎))))
+    (fold (mapWithKey f (node (suc (suc n)) k v l r)) ∎)))
+foldMapWithKey≡foldMapWithKey f _ = {! error  !}
       
 -- %%%%%%%%%%%%% Strict folds %%%%%%%%%%%%%%%%%%%%%%
 

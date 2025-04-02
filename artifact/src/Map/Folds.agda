@@ -37,8 +37,9 @@ fold xs = foldr mappend mempty xs
 -- such that foldMapWithKey f = fold . mapWithKey f
 foldMapWithKey : {K V M : Set} → {{Monoid M}} → (K → V → M) → Map K V → M 
 foldMapWithKey f tip = mempty
-foldMapWithKey f (node 1 x₁ x₂ _ _) = f x₁ x₂
-foldMapWithKey f (node _ x₁ x₂ m m₁) = mappend (foldMapWithKey f m) (mappend (f x₁ x₂) (foldMapWithKey f m₁)) 
+foldMapWithKey f (node 1 x₁ x₂ tip tip) = f x₁ x₂
+foldMapWithKey f (node (suc (suc n)) x₁ x₂ m m₁) = mappend (foldMapWithKey f m) (mappend (f x₁ x₂) (foldMapWithKey f m₁)) 
+foldMapWithKey f _ = {! error  !}
 
 -- %%%%%%%%%%%%% Strict folds %%%%%%%%%%%%%%%%%%%%%%
 
@@ -52,7 +53,7 @@ foldr' f v (node s k v₁ l r) = foldr' f (primForce (foldr' f v r) (f v₁)) l
 -- the result in the next application. This function is strict in the starting value.
 foldl' : {V K A : Set} → (V → A → V) → V → Map K A → V
 foldl' f v tip = v
-foldl' f v (node s k v₁ l r) = foldl f (primForce ((foldl f v l)) (λ x → f x v₁)) r
+foldl' f v (node s k v₁ l r) = foldl' f (primForce ((foldl' f v l)) (λ x → f x v₁)) r
 
 -- A strict version of foldrWithKey. Each application of the operator is evaluated before using 
 -- the result in the next application. This function is strict in the starting value.
@@ -64,4 +65,4 @@ foldrWithKey' f v (node s k v₁ l r) = foldrWithKey' f (primForce (foldrWithKey
 -- the result in the next application. This function is strict in the starting value.
 foldlWithKey' : {V K A : Set} → (V → K → A → V) → V → Map K A → V
 foldlWithKey' f v tip = v  
-foldlWithKey' f v (node s k v₁ l r) = foldlWithKey' f (primForce (foldlWithKey' f v l) (λ x → f x k v₁)) r
+foldlWithKey' f v (node s k v₁ l r) = foldlWithKey' f (primForce (foldlWithKey' f v l) (λ x → f x k v₁)) r 
