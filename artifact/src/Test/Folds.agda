@@ -4,6 +4,7 @@ open import Agda.Builtin.Nat
 open import Agda.Builtin.String
 open import Agda.Builtin.Equality
 open import Agda.Builtin.List
+open import Agda.Builtin.Strict
 
 open import Test.Cases
 open import Map.Folds
@@ -148,16 +149,85 @@ mappendZeroY≡mappendYZero (suc n) = (mappendZeroY≡mappendYZero n) under suc
 foldMapWithKey≡foldMapWithKey : (f : K → V → Nat) → (m : Map K V) -- {{Monoid M}} → (f : K → V → M) → (m : Map K V) 
     → foldMapWithKey f m ≡ fold (mapWithKey f m)
 foldMapWithKey≡foldMapWithKey f tip = refl
-foldMapWithKey≡foldMapWithKey f (node 1 k v tip tip) = mappendZeroY≡mappendYZero (f k v)
-foldMapWithKey≡foldMapWithKey f (node n k v l r) = 
-    foldMapWithKey f (node n k v l r) 
-        ≡⟨ {!   !} ⟩ -- definition foldMap
+foldMapWithKey≡foldMapWithKey f (node 0 k v l r) = {!   !}
+foldMapWithKey≡foldMapWithKey f (node 1 k v _ _) = {! mappendZeroY≡mappendYZero (f k v)  !}
+foldMapWithKey≡foldMapWithKey f (node (suc (suc n)) k v l r) = 
+    foldMapWithKey f (node (suc (suc n)) k v l r) 
+        ≡⟨ refl ⟩ -- definition foldMap
     (mappend (foldMapWithKey f l) (mappend (f k v) (foldMapWithKey f r)) 
         ≡⟨ ((foldMapWithKey≡foldMapWithKey f r) under (mappend (f k v))) under (mappend (foldMapWithKey f l)) ⟩ 
     (mappend (foldMapWithKey f l) (mappend (f k v) (fold (mapWithKey f r))) 
         ≡⟨ (foldMapWithKey≡foldMapWithKey f l) under (λ y → mappend y (mappend (f k v) (fold (mapWithKey f r)))) ⟩ 
     (mappend (fold (mapWithKey f l)) (mappend (f k v) (fold (mapWithKey f r)))
         ≡⟨ sym (mappend≡foldrMappend (mapWithKey f l) (mappend (f k v) (fold (mapWithKey f r)))) ⟩ 
-    (fold (mapWithKey f (node n k v l r)) ∎))))
+    (fold (mapWithKey f (node (suc (suc n)) k v l r)) ∎))))
       
--- TO DO: add tests for the strict folds. Are they the same as the above??      
+-- %%%%%%%%%%%%% Strict folds %%%%%%%%%%%%%%%%%%%%%%
+
+-- foldr' f z == foldr f z . elems  
+foldr'≡foldrList-elems : {{Comparable K}} → (f : A → V → V) → (z : V) → (m : Map K A)
+    → foldr' f z m ≡ foldrList f z (elems m)
+foldr'≡foldrList-elems f z tip = refl
+foldr'≡foldrList-elems f z (node x k v l r) = 
+    foldr' f z (node x k v l r) 
+       ≡⟨ ((foldr'≡foldrList-elems f z r) under (λ y → primForce y (f v))) under (λ y → foldr' f y l) ⟩ 
+    (foldr' f (primForce (foldrList f z (foldr _∷_ [] r)) (f v)) l 
+       ≡⟨ foldr'≡foldrList-elems f (primForce (foldrList f z (foldr _∷_ [] r)) (f v)) l ⟩ 
+    (foldrList f (primForce (foldrList f z (foldr _∷_ [] r)) (f v)) (elems l) 
+       ≡⟨ primForceLemma (foldrList f z (foldr _∷_ [] r)) (f v) under (λ y → foldrList f y (elems l)) ⟩ 
+    (foldrList f (f v (foldrList f z (foldr _∷_ [] r))) (elems l)
+        ≡⟨ sym (foldrList-split f z (elems l) (v ∷ elems r)) ⟩ 
+    (foldrList f z (elems l ++ (v ∷ elems r)) 
+       ≡⟨ (sym (elems≡elems  x k v l r)) under (foldrList f z) ⟩ 
+    (foldrList f z (elems (node x k v l r)) ∎))))) 
+
+-- foldl' f z == foldl f z . elems
+foldl'≡foldlList-elems : {{Comparable K}} → (f : V → A → V) → (z : V) → (m : Map K A)
+    → foldl' f z m ≡ foldlList f z (elems m) 
+foldl'≡foldlList-elems f z tip = refl
+foldl'≡foldlList-elems f z (node x k v l r) = 
+    foldl' f z (node x k v l r) 
+        ≡⟨ ((foldl'≡foldlList-elems f z l) under (λ y → primForce y (λ x₁ → f x₁ v))) under (λ y → foldl' f y r) ⟩ 
+    ((foldl' f (primForce (foldlList f z (foldr _∷_ [] l)) (λ x₁ → f x₁ v)) r 
+        ≡⟨ foldl'≡foldlList-elems f (primForce (foldlList f z (foldr _∷_ [] l)) (λ x₁ → f x₁ v)) r ⟩ 
+    ((foldlList f (primForce (foldlList f z (foldr _∷_ [] l)) (λ x₁ → f x₁ v)) (elems r) 
+        ≡⟨ primForceLemma (foldlList f z (foldr _∷_ [] l)) (λ x₁ → f x₁ v) under (λ y → foldlList f y (elems r)) ⟩ 
+    (foldlList f (f (foldlList f z (foldr _∷_ [] l)) v) (elems r)
+        ≡⟨ sym (foldlList-split f z (elems l) (v ∷ elems r)) ⟩ 
+    (foldlList f z (elems l ++ (v ∷ elems r)) 
+        ≡⟨ (sym (elems≡elems  x k v l r)) under (foldlList f z) ⟩ 
+    (foldlList f z (elems (node x k v l r)) ∎)))))))
+
+-- foldrWithKey' f z == foldr (uncurry f) z . toAscList
+foldrWithKey'≡foldr : {{Comparable K}} → (f : K → A → V → V) → (z : V) → (m : Map K A) 
+    → foldrWithKey' f z m ≡ foldrList (λ p x → f (Pair.fst p) (Pair.snd p) x) z (toAscList m)
+foldrWithKey'≡foldr f z tip = refl
+foldrWithKey'≡foldr f z (node x k v l r) = 
+    foldrWithKey' f z (node x k v l r) 
+        ≡⟨ ((foldrWithKey'≡foldr f z r) under (λ y → primForce y (f k v))) under (λ y → foldrWithKey' f y l) ⟩ 
+    (foldrWithKey' f (primForce (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (foldrWithKey (λ k₁ v₁ → _∷_ (k₁ , v₁)) [] r)) (f k v)) l 
+        ≡⟨ foldrWithKey'≡foldr f (primForce (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (foldrWithKey (λ k₁ v₁ → _∷_ (k₁ , v₁)) [] r)) (f k v)) l ⟩ 
+    (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) (primForce (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (foldrWithKey (λ k₁ v₁ → _∷_ (k₁ , v₁)) [] r)) (f k v)) (toAscList l) 
+        ≡⟨ primForceLemma (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (foldrWithKey (λ k₁ v₁ → _∷_ (k₁ , v₁)) [] r)) (f k v) under (λ y → foldrList (λ p → f (Pair.fst p) (Pair.snd p)) y (toAscList l)) ⟩ 
+    (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) (f k v (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (foldrWithKey (λ k₁ v₁ → _∷_ (k₁ , v₁)) [] r))) (toAscList l)    
+        ≡⟨ sym (foldrList-split ((λ p → f (Pair.fst p) (Pair.snd p))) z (toAscList l) ((k , v) ∷ toAscList r)) ⟩ 
+    (foldrList (λ p → f (Pair.fst p) (Pair.snd p)) z (toAscList l ++ ((k , v) ∷ toAscList r)) 
+        ≡⟨ sym ((toAscList≡toAscList  x k v l r) under (foldrList (λ p x → f (Pair.fst p) (Pair.snd p) x) z)) ⟩ 
+    (foldrList (λ p x → f (Pair.fst p) (Pair.snd p) x) z (toAscList (node x k v l r)) ∎))))) 
+
+-- foldlWithKey' f z == foldl (\z' (kx, x) -> f z' kx x) z . toAscList
+foldlWithKey'≡foldl : {{Comparable K}} → (f : V → K → A → V) → (z : V) → (m : Map K A) 
+    → foldlWithKey' f z m ≡ foldlList (λ x p → f x (Pair.fst p) (Pair.snd p)) z (toAscList m)
+foldlWithKey'≡foldl f z tip = refl
+foldlWithKey'≡foldl f z (node x k v l r) = 
+    foldlWithKey' f z (node x k v l r) 
+        ≡⟨ ((foldlWithKey'≡foldl f z l) under (λ y → primForce y (λ x₁ → f x₁ k v))) under (λ y → foldlWithKey' f y r) ⟩ 
+    ((foldlWithKey' f (primForce (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (foldrWithKey (λ k₁ v₁ → _∷_ (k₁ , v₁)) [] l)) (λ x₁ → f x₁ k v)) r 
+        ≡⟨ foldlWithKey'≡foldl f (primForce (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (foldrWithKey (λ k₁ v₁ → _∷_ (k₁ , v₁)) [] l)) (λ x₁ → f x₁ k v)) r ⟩ 
+    (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) (primForce (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (foldrWithKey (λ k₁ v₁ → _∷_ (k₁ , v₁)) [] l)) (λ x₁ → f x₁ k v)) (toAscList r) 
+        ≡⟨ primForceLemma (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (foldrWithKey (λ k₁ v₁ → _∷_ (k₁ , v₁)) [] l)) (λ x₁ → f x₁ k v) under (λ y → foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) y (toAscList r)) ⟩ 
+    (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) (f (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (foldrWithKey (λ k₁ v₁ → _∷_ (k₁ , v₁)) [] l)) k v) (toAscList r)
+        ≡⟨ sym (foldlList-split (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList l) ((k , v) ∷ toAscList r)) ⟩ 
+    (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList l ++ ((k , v) ∷ toAscList r)) 
+    ≡⟨ sym ((toAscList≡toAscList x k v l r) under (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z)) ⟩ 
+    (foldlList (λ x₁ p → f x₁ (Pair.fst p) (Pair.snd p)) z (toAscList (node x k v l r)) ∎)))))) 
