@@ -1,5 +1,6 @@
 module Test.Cases where
 
+open import Agda.Builtin.Bool
 open import Agda.Builtin.Nat
 open import Agda.Builtin.String
 open import Agda.Builtin.List
@@ -54,9 +55,10 @@ x ≡⟨ x=y ⟩ y=z = trans x=y y=z
 _∎ : (a : A) → a ≡ a
 a ∎ = refl
 
-_++_ : (l : List A) → (r : List A) → List A
-[] ++ r = r
-(x ∷ l) ++ r = x ∷ l ++ r
+odd  : Nat → Bool
+odd zero     = false
+odd (suc zero) = true
+odd (suc (suc n))  = odd n
 
 []++≡id : (as : List A) → [] ++ as ≡ as
 []++≡id as = refl
@@ -74,6 +76,15 @@ KV7c = 7 , "c"
 
 testEmpty : Map Nat String
 testEmpty = fromList []
+
+test2Nat : Map Nat Nat
+test2Nat = fromList (2 , 2 ∷ []) 
+
+test15Nat : Map Nat Nat
+test15Nat = fromList (1 , 1 ∷ 5 , 5 ∷ []) 
+
+test15SucNat : Map Nat Nat
+test15SucNat = fromList (1 , 2 ∷ 5 , 6 ∷ []) 
 
 test53 : Map Nat String
 test53 = fromList (KV5a ∷ KV3b ∷ [])

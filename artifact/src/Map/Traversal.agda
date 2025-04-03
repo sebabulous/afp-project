@@ -19,7 +19,7 @@ mapWithKey f (node s k v l r) = node s k (f k v) (mapWithKey f l) (mapWithKey f 
 
 traverseWithKey : {K V B : Set}{F : Set → Set} → {{Applicative F}} →  (K → V → F B) → Map K V → F (Map K B) 
 traverseWithKey f tip = pure tip
-traverseWithKey f (node 1 k v _ _) = pure (λ v₁ → node 1 k v₁ tip tip) <*> f k v -- USE FMAP
+traverseWithKey f (node 1 k v _ _) = pure (λ v₁ → node 1 k v₁ tip tip) <*> f k v 
 traverseWithKey f (node s k v l r) = liftA3 (λ l₁ v₁ r₁ → node s k v₁ l₁ r₁) (traverseWithKey f l) (f k v) (traverseWithKey f r) -- USE FLIP
 
 traverseMaybeWithKey : {K V B : Set}{F : Set → Set} → {{Comparable K}} → {{Applicative F}} → (K → V → F (Maybe B)) → Map K V → F (Map K B)
