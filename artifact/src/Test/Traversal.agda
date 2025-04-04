@@ -19,19 +19,15 @@ _ = refl
 _ : mapWithKey (λ key x → primStringAppend (primStringAppend (primShowNat key) ":") x) test35 ≡ test35update35
 _ = refl
 
--- traverseWithKey (\k v -> if odd k then Just (succ v) else Nothing) (fromList [(1, 'a'), (5, 'e')]) == Just (fromList [(1, 'b'), (5, 'f')])
 _ : traverseWithKey (λ k v → if odd k then just (suc v) else nothing) test15Nat ≡ just test15SucNat
 _ = refl
 
--- traverseWithKey (\k v -> if odd k then Just (succ v) else Nothing) (fromList [(2, 'c')]) == Nothing
 _ : traverseWithKey (λ k v → if odd k then just (suc v) else nothing) test2Nat ≡ nothing
 _ = refl
 
--- traverseMaybeWithKey (\k v -> if odd k then Just (succ v) else Nothing) (fromList [(1, 'a'), (5, 'e')]) == Just (fromList [(1, 'b'), (5, 'f')])
-_ : traverseMaybeWithKey (λ k v → if odd k then just (just (suc v)) else nothing) test15Nat ≡ just test15SucNat
+_ : traverseMaybeWithKey (λ k v → if odd k then just (just (suc v)) else nothing) test15Nat ≡ just test15SucNat --node 2 1 2 tip (node 1 5 6 tip tip)
 _ = {!  refl !}
 
--- traverseMaybeWithKey (\k v -> if odd k then Just (succ v) else Nothing) (fromList [(2, 'c')]) == Nothing
 _ : traverseMaybeWithKey (λ k v → if odd k then just (just (suc v)) else nothing) test2Nat ≡ nothing
 _ = refl
 
@@ -41,7 +37,8 @@ _ = refl
 _ : mapAccumWithKey (λ a k b → primStringAppend a (primStringAppend " " (primStringAppend (primShowNat k) (primStringAppend "-" b))) , primStringAppend b "x") "Everything:" test35 ≡ ("Everything: 3-b 5-a" , test35addX) 
 _ = refl
 
--- Add tests for mapAccumRWithKey
+_ : mapAccumRWithKey (λ a k b → primStringAppend a (primStringAppend " " (primStringAppend (primShowNat k) (primStringAppend "-" b))) , primStringAppend b "x") "Everything:" test35 ≡ ("Everything: 5-a 3-b" , test35addX) 
+_ = refl
 
 _ : mapKeys (λ x → x + 1) test35 ≡ test35add1 
 _ = refl

@@ -22,6 +22,10 @@ _++_ : {A : Set} → (l : List A) → (r : List A) → List A
 
 infixl 3 _&&_
 
+maybe : {A B : Set} → B → (A -> B) → Maybe A → B
+maybe n _ nothing  = n
+maybe _ f (just x) = f x
+
 data Ord : Set where
   eq : Ord
   lt : Ord
