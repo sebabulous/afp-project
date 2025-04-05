@@ -43,7 +43,6 @@ mutual
            ≡⟨ (foldrIdent (elems l ++ (v ∷ elems r))) ⟩ 
         ((elems l ++ (v ∷ elems r)) ∎) ))))))
     
-    -- foldr f z == foldr f z . elems  
     foldr≡foldrList-elems : {{Comparable K}} → (f : A → V → V) → (z : V) → (m : Map K A)
         → foldr f z m ≡ foldrList f z (elems m)
     foldr≡foldrList-elems f z tip = refl
@@ -58,30 +57,45 @@ mutual
            ≡⟨ cong (foldrList f z) (sym (elems≡elems  x k v l r)) ⟩ 
         (foldrList f z (elems (node x k v l r)) ∎)))) 
 
--- foldl f z == foldl f z . elems
-foldl≡foldlList-elems : {{Comparable K}} → (f : V → A → V) → (z : V) → (m : Map K A)
-    → foldl f z m ≡ foldlList f z (elems m) 
-foldl≡foldlList-elems f z tip = refl
-foldl≡foldlList-elems f z (node x k v l r) = 
-    foldl f z (node x k v l r) 
-        ≡⟨ cong (λ y → foldl f y r) (cong (λ y → f y v) (foldl≡foldlList-elems f z l)) ⟩ 
-    ((foldl f (f (foldlList f z (elems l)) v) r 
-        ≡⟨ foldl≡foldlList-elems f (f (foldlList f z (elems l)) v) r ⟩ 
-    ((foldlList f (f (foldlList f z (elems l)) v) (elems r) 
-        ≡⟨ {!   !} ⟩ 
-    (foldlList f z (elems l ++ (v ∷ elems r)) 
-        ≡⟨ cong (foldlList f z) (sym (elems≡elems  x k v l r)) ⟩ 
-    (foldlList f z (elems (node x k v l r)) ∎)))))) 
 
--- foldrWithKey f z == foldr (uncurry f) z . toAscList
-testFoldrWithKey : {f : K → A → V → V} → {{Comparable K}} → (m : Map K A) → foldrWithKey f z m ≡ foldrList (λ p x → f (Pair.fst p) (Pair.snd p) x) z (toAscList m)
-testFoldrWithKey tip = refl
-testFoldrWithKey (node x x₁ x₂ m m₁) = trans {!   !} {!   !}
 
--- foldlWithKey f z == foldl (\z' (kx, x) -> f z' kx x) z . toAscList
-testFoldlWithKey : {f : V → K → A → V} → {{Comparable K}} → (m : Map K A) → foldlWithKey f z m ≡ foldlList (λ x p → f x (Pair.fst p) (Pair.snd p)) z (toAscList m)
-testFoldlWithKey tip = refl
-testFoldlWithKey (node x x₁ x₂ m m₁) = trans {!   !} {!   !}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- foldl≡foldlList-elems : {{Comparable K}} → (f : V → A → V) → (z : V) → (m : Map K A)
+--     → foldl f z m ≡ foldlList f z (elems m) 
+-- foldl≡foldlList-elems f z tip = refl
+-- foldl≡foldlList-elems f z (node x k v l r) = 
+--     foldl f z (node x k v l r) 
+--         ≡⟨ cong (λ y → foldl f y r) (cong (λ y → f y v) (foldl≡foldlList-elems f z l)) ⟩ 
+--     ((foldl f (f (foldlList f z (elems l)) v) r 
+--         ≡⟨ foldl≡foldlList-elems f (f (foldlList f z (elems l)) v) r ⟩ 
+--     ((foldlList f (f (foldlList f z (elems l)) v) (elems r) 
+--         ≡⟨ {!   !} ⟩ 
+--     (foldlList f z (elems l ++ (v ∷ elems r)) 
+--         ≡⟨ cong (foldlList f z) (sym (elems≡elems  x k v l r)) ⟩ 
+--     (foldlList f z (elems (node x k v l r)) ∎)))))) 
+
+-- -- foldrWithKey f z == foldr (uncurry f) z . toAscList
+-- testFoldrWithKey : {f : K → A → V → V} → {{Comparable K}} → (m : Map K A) → foldrWithKey f z m ≡ foldrList (λ p x → f (Pair.fst p) (Pair.snd p) x) z (toAscList m)
+-- testFoldrWithKey tip = refl
+-- testFoldrWithKey (node x x₁ x₂ m m₁) = trans {!   !} {!   !}
+
+-- -- foldlWithKey f z == foldl (\z' (kx, x) -> f z' kx x) z . toAscList
+-- testFoldlWithKey : {f : V → K → A → V} → {{Comparable K}} → (m : Map K A) → foldlWithKey f z m ≡ foldlList (λ x p → f x (Pair.fst p) (Pair.snd p)) z (toAscList m)
+-- testFoldlWithKey tip = refl
+-- testFoldlWithKey (node x x₁ x₂ m m₁) = trans {!   !} {!   !}
 
 -- foldMapWithKey f = fold . mapWithKey f
 --_ : {M : Set} → {{Monoid M}} → {f : K → A → M} → foldMapWithKey f m ≡ {!   !}

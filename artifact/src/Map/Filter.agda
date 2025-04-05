@@ -14,6 +14,7 @@ data Either (A B : Set) : Set where
 
 private variable
   K V W Q : Set
+  
 
 filterWithKey : {{Comparable K}} → (K → V → Bool) → Map K V → Map K V
 filterWithKey _ tip = tip

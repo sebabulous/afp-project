@@ -3,3 +3,10 @@ main.synctex.gz
 main.vtc
 *.agdai
 *.pdf
+artifact/src/MAlonzo
+artifact/src/Benchmarks/MAlonzo
+artifact/src/Benchmarks/dist-newstyle
+artifact/src/Benchmarks/out.csv
+out.csv
+*.hi
+*.o

@@ -15,9 +15,9 @@ singleton k v = node 1 k v tip tip
 -- fromSet
 -- fromArgSet
 
-foldrList : {E R : Set} → (E → R → R) → R → List E → R
-foldrList f b [] = b
-foldrList f b (x ∷ l) = f x (foldrList f b l)
+foldrList : {A B : Set} → (A → B → B) → B → List A → B
+foldrList _ b [] = b
+foldrList f b (x ∷ xs) = f x (foldrList f b xs)
 
 foldlList : {E R : Set} → (R → E → R) → R → List E → R
 foldlList _ v []       = v

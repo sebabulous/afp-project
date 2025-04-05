@@ -6,9 +6,9 @@ open import Map.Map
 
 -- Fold the values in the map using the given right-associative binary operator, 
 -- such that foldr f z == foldr f z . elems.
-foldr : {V K A : Set} → (A → V → V) → V → Map K A → V
-foldr f v tip = v
-foldr f v (node s k v₁ l r) = foldr f (f v₁ (foldr f v r)) l
+foldr : {B K A : Set} → (A → B → B) → B → Map K A → B
+foldr _ b tip = b
+foldr f b (node s k a l r) = foldr f (f a (foldr f b r)) l
 
 -- Fold the values in the map using the given left-associative binary operator, 
 -- such that foldl f z == foldl f z . elems.

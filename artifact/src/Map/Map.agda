@@ -4,6 +4,9 @@ open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Equality
 
+private variable
+  K V A : Set
+
 _||_ : Bool → Bool → Bool
 true || _ = true
 _ || true = true
@@ -31,6 +34,7 @@ record Pair (A B : Set): Set where
 record Comparable (A : Set) : Set where
   field
     compare : A → A → Ord
+    compare-reflexive : ∀ k → compare k k ≡ eq
 
 open Comparable {{...}} public
 
@@ -40,6 +44,9 @@ instance
   compare {{ NatCmp }} zero (suc _) = lt
   compare {{ NatCmp }} (suc _) zero = gt
   compare {{ NatCmp }} (suc x) (suc y) = compare x y
+
+  compare-reflexive {{ NatCmp }} zero = refl
+  compare-reflexive {{ NatCmp }} (suc n) = compare-reflexive n
 
 record Functor (F : (A : Set) → Set): Set₁ where
   field
