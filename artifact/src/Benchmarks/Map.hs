@@ -61,66 +61,61 @@ main = do
   when exists (removeFile fp)
   defaultMainWith
     defaultConfig {csvFile = Just fp}
-    [ bgroup
-        "Insert Integer (Randomized)"
-        (insertInts [ InsertInt "Haskell" (show . insertMapLazy)
-        , InsertInt "Data.Map.Lazy.Agda" (\x -> show $ Agda.d_insertMapLazy_4 x (Agda.Construction.d_empty_8 () ()))
-        ])
-    -- , bgroup
-    --     "Intersection (Randomized)"
-    --     (intersection
-    --        [ Intersection "Haskell" Data.Map.Lazy.fromList Data.Map.Lazy.intersection
-    --         --,Intersection "Agda" Agda.Construction.d_fromList_58 Agda.Combine.intersection
-    --         ])
-    -- , bgroup
-    --     "Intersection ByteString (Randomized)"
-    --     (intersectionBS
-    --        [ IntersectionBS "Haskell" Data.Map.Lazy.fromList Data.Map.Lazy.intersection
-    --        --, IntersectionBS "Agda" Agda.Construction.d_fromList_58 Agda.Combine.intersection
-    --        ])
-    -- , bgroup
-    --     "Lookup Int (Randomized)"
-    --     (lookupRandomized
-    --        [ Lookup "Haskell" Data.Map.Lazy.fromList Data.Map.Lazy.lookup
-    --        -- , Lookup "Agda" Agda.Construction.d_fromList_58 Agda.Query.d_lookup_22
-    --        ])
-    -- , bgroup
-    --     "FromList ByteString (Monotonic)"
-    --     (insertBSMonotonic
-    --        [ FromListBS "Haskell" Data.Map.Lazy.fromList
-    --       --  , FromListBSAgda "Agda" Agda.Construction.du_fromList_56
-    --       --  , FromListBSAgda "Agda" (show . Agda.d_fromListLazy_12)
-    --        ])
-    -- , bgroup
-    --     "FromList ByteString (Randomized)"
-    --     (insertBSRandomized
-    --        [ FromListBS "Haskell" Data.Map.Lazy.fromList
-    --        -- , FromListBSAgda "Agda" Agda.Construction.du_fromList_58 
-    --        ])
-    -- , bgroup
-    --     "Lookup ByteString Monotonic"
-    --     (lookupBSMonotonic
-    --        [ LookupBS "Haskell" Data.Map.Lazy.fromList Data.Map.Lazy.lookup
-    --        -- , LookupBS "Agda" Agda.Construction.du_fromList_58 Agda.Query.d_lookup_22
-    --        ])
-    -- , bgroup
-    --     "Lookup ByteString Randomized"
-    --     (lookupBSRandomized
-    --        [ LookupBS "Haskell" Data.Map.Lazy.fromList Data.Map.Lazy.lookup
-    --        -- , LookupBS "Agda" Agda.Construction.du_fromList_58 Agda.Query.d_lookup_22
-    --        ])
+        [ bgroup
+        "Insert Int (Randomized)"
+        [ insertInts "Haskell" (nf insertMapLazy 10) 10, 
+        insertInts "Haskell" (nf insertMapLazy 100) 100, 
+        insertInts "Haskell" (nf insertMapLazy 10) 1000, 
+        insertInts "Haskell" (nf insertMapLazy 100) 10000,  
+        insertInts "Agda" (nf Agda.d_insertMapLazy_4 10) 10, 
+        insertInts "Agda" (nf Agda.d_insertMapLazy_4 100) 100,
+        insertInts "Agda" (nf Agda.d_insertMapLazy_4 10) 1000, 
+        insertInts "Agda" (nf Agda.d_insertMapLazy_4 100) 10000]
+    , bgroup
+        "Intersection (Randomized)"
+        (intersection
+           [ Intersection "Haskell" Data.Map.Lazy.fromList Data.Map.Lazy.intersection
+            --,Intersection "Agda" Agda.Construction.d_fromList_58 Agda.Combine.intersection
+            ])
+    , bgroup
+        "Intersection ByteString (Randomized)"
+        (intersectionBS
+           [ IntersectionBS "Haskell" Data.Map.Lazy.fromList Data.Map.Lazy.intersection
+           --, IntersectionBS "Agda" Agda.Construction.d_fromList_58 Agda.Combine.intersection
+           ])
+    , bgroup
+        "Lookup Int (Randomized)"
+        (lookupRandomized
+           [ Lookup "Haskell" Data.Map.Lazy.fromList Data.Map.Lazy.lookup
+           -- , Lookup "Agda" Agda.Construction.d_fromList_58 Agda.Query.d_lookup_22
+           ])
+    , bgroup
+        "FromList ByteString (Monotonic)" 
+        (insertBSMonotonic
+           [ FromListBS "Haskell" Data.Map.Lazy.fromList
+           -- , FromListBS "Agda" (\x -> Agda.Construction.du_fromList_58 d_NatCmp_50 (toPair x))
+           ])
+    , bgroup
+        "FromList ByteString (Randomized)"
+        (insertBSRandomized
+           [ FromListBS "Haskell" Data.Map.Lazy.fromList
+           -- , FromListBSAgda "Agda" Agda.Construction.du_fromList_58 
+           ])
+    , bgroup
+        "Lookup ByteString Monotonic"
+        (lookupBSMonotonic
+           [ LookupBS "Haskell" Data.Map.Lazy.fromList Data.Map.Lazy.lookup
+           -- , LookupBS "Agda" Agda.Construction.du_fromList_58 Agda.Query.d_lookup_22
+           ])
+    , bgroup
+        "Lookup ByteString Randomized"
+        (lookupBSRandomized
+           [ LookupBS "Haskell" Data.Map.Lazy.fromList Data.Map.Lazy.lookup
+           -- , LookupBS "Agda" Agda.Construction.du_fromList_58 Agda.Query.d_lookup_22
+           ])
     ]
   where
-    insertInts funcs =
-      [ env
-        (let !elems =
-               force (zip (randoms (mkStdGen 0) :: [Integer]) [1 :: Integer .. i])
-          in pure elems)
-        (\_ -> bench (title ++ ":" ++ show i) $ nf func i)
-      -- | i <- [10, 100, 1000, 10000]
-      | i <- [10, 50, 100, 150, 200]
-      , InsertInt title func <- funcs
-      ]
+    insertInts title output i = env (pure (force (zip (randoms (mkStdGen 0) :: [Int]) [1 :: Int .. i]))) (\_ -> bench (title ++ ":" ++ show i) output)
     intersection funcs =
       [ env
         (let !args =
@@ -240,4 +235,4 @@ insertMapLazy :: Integer -> Data.Map.Lazy.Map Integer Integer
 insertMapLazy n0 = go n0 mempty
   where
     go 0 acc = acc
-    go n !acc = go (n - 1) (Data.Map.Lazy.insert n n acc)
+    go n acc = go (n - 1) (Data.Map.Lazy.insert n n acc)

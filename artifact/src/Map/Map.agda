@@ -2,6 +2,8 @@ module Map.Map where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
+open import Agda.Builtin.List
+open import Agda.Builtin.Maybe
 open import Agda.Builtin.Equality
 
 private variable
@@ -17,7 +19,15 @@ false && _ = false
 _ && false = false
 _ && _ = true
 
+_++_ : {A : Set} → (l : List A) → (r : List A) → List A
+[] ++ r = r
+(x ∷ l) ++ r = x ∷ l ++ r
+
 infixl 3 _&&_
+
+maybe : {A B : Set} → B → (A -> B) → Maybe A → B
+maybe n _ nothing  = n
+maybe _ f (just x) = f x
 
 data Ord : Set where
   eq : Ord
@@ -54,6 +64,11 @@ record Functor (F : (A : Set) → Set): Set₁ where
 
 open Functor {{...}} public
 
+instance
+  MaybeFunctor : Functor Maybe
+  fmap ⦃ MaybeFunctor ⦄ f (just x) = just (f x)
+  fmap ⦃ MaybeFunctor ⦄ f nothing = nothing
+
 record Applicative (F : Set → Set): Set₁ where
   field
     pure : {A : Set} → A → F A
@@ -62,12 +77,25 @@ record Applicative (F : Set → Set): Set₁ where
 
 open Applicative {{...}} public
 
+instance
+  MaybeApplicative : Applicative Maybe
+  pure ⦃ MaybeApplicative ⦄ a = just a
+  _<*>_ ⦃ MaybeApplicative ⦄ (just f) m = fmap f m
+  _<*>_ ⦃ MaybeApplicative ⦄ nothing m = nothing
+  liftA3 ⦃ MaybeApplicative ⦄ f a b c = (fmap f a <*> b) <*> c 
+
 record Monoid (M : Set) : Set where 
   field 
     mempty : M
     mappend : M -> M -> M
 
 open Monoid {{...}} public
+
+instance
+  NatMonoid : Monoid Nat
+  mempty {{ NatMonoid }} = zero
+  mappend {{ NatMonoid }} zero n = n
+  mappend {{ NatMonoid }} (suc x) n = suc (mappend x n)
 
 data Map (K : Set) (V : Set) : Set where
   tip : Map K V

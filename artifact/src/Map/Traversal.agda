@@ -19,17 +19,13 @@ mapWithKey f (node s k v l r) = node s k (f k v) (mapWithKey f l) (mapWithKey f 
 
 traverseWithKey : {K V B : Set}{F : Set → Set} → {{Applicative F}} →  (K → V → F B) → Map K V → F (Map K B) 
 traverseWithKey f tip = pure tip
-traverseWithKey f (node 1 k v _ _) = pure (λ v₁ → node 1 k v₁ tip tip) <*> f k v -- USE FMAP
+traverseWithKey f (node 1 k v _ _) = pure (λ v₁ → node 1 k v₁ tip tip) <*> f k v 
 traverseWithKey f (node s k v l r) = liftA3 (λ l₁ v₁ r₁ → node s k v₁ l₁ r₁) (traverseWithKey f l) (f k v) (traverseWithKey f r) -- USE FLIP
 
 traverseMaybeWithKey : {K V B : Set}{F : Set → Set} → {{Comparable K}} → {{Applicative F}} → (K → V → F (Maybe B)) → Map K V → F (Map K B)
 traverseMaybeWithKey f tip = pure tip
-traverseMaybeWithKey f (node s k v tip tip) = pure (λ x → maybe k x) <*> f k v
-   where
-      maybe : {K V : Set} → K → Maybe V → Map K V
-      maybe k (just x) = node 1 k x tip tip
-      maybe k nothing = tip
-traverseMaybeWithKey f (node s k v l r) = liftA3 (λ l₁ v₁ r₁ → combine k l₁ v₁ r₁) (traverseMaybeWithKey f l) (f k v) (traverseMaybeWithKey f r) 
+traverseMaybeWithKey f (node _ k v tip tip) = pure(maybe tip (λ v₁ → node 1 k v₁ tip tip)) <*> f k v 
+traverseMaybeWithKey f (node _ k v l r) = liftA3 (combine k) (traverseMaybeWithKey f l) (f k v) (traverseMaybeWithKey f r)  
    where
       combine : {K V : Set} → {{Comparable K}} → K → Map K V → Maybe V → Map K V → Map K V
       combine k₁ l₂ (just x) r₂ = link k₁ x l₂ r₂
