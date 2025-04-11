@@ -7,6 +7,8 @@ open import Agda.Builtin.List
 open import Map.Balance
 open import Map.Construction
 open import Map.Map
+open import Helpers.Comparable
+open import Helpers.Pair
 
 data Either (A B : Set) : Set where
   left : A → Either A B

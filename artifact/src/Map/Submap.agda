@@ -6,6 +6,8 @@ open import Agda.Builtin.Maybe
 open import Map.Query
 open import Map.Map
 open import Map.Filter
+open import Helpers.Comparable
+open import Helpers.Pair
 
 private variable
   K A B : Set

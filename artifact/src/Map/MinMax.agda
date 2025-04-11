@@ -2,6 +2,8 @@ module Map.MinMax where
 
 open import Agda.Builtin.Maybe
 open import Map.Balance
+open import Helpers.Pair
+open import Helpers.Comparable
 open import Map.Map
 
 open import Map.DeletionUpdate

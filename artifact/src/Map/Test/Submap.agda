@@ -7,6 +7,7 @@ open import Agda.Builtin.Equality
 open import Map.Test.Cases
 open import Map.Submap
 open import Map.Map
+open import Helpers.Comparable
 
 -- TO DO: write tests
 

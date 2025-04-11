@@ -6,6 +6,8 @@ open import Map.Folds
 open import Map.Insertion
 open import Map.Map
 open import Map.Balance
+open import Helpers.Comparable
+open import Helpers.Pair
 
 private variable
   A B C V K K1 : Set

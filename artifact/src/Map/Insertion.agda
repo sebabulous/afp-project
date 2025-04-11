@@ -4,6 +4,7 @@ open import Agda.Builtin.Nat
 
 open import Map.Query
 open import Map.Map
+open import Helpers.Comparable
 
 private variable
   K A : Set

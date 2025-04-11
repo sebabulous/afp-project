@@ -29,35 +29,6 @@ maybe : {A B : Set} → B → (A -> B) → Maybe A → B
 maybe n _ nothing  = n
 maybe _ f (just x) = f x
 
-data Ord : Set where
-  eq : Ord
-  lt : Ord
-  gt : Ord
-
--- source: https://agda.readthedocs.io/en/v2.5.2/language/record-types.html
-record Pair (A B : Set): Set where
-  constructor _,_
-  field
-    fst : A
-    snd : B
-
-record Comparable (A : Set) : Set where
-  field
-    compare : A → A → Ord
-    compare-reflexive : ∀ k → compare k k ≡ eq
-
-open Comparable {{...}} public
-
-instance
-  NatCmp : Comparable Nat
-  compare {{ NatCmp }} zero zero = eq
-  compare {{ NatCmp }} zero (suc _) = lt
-  compare {{ NatCmp }} (suc _) zero = gt
-  compare {{ NatCmp }} (suc x) (suc y) = compare x y
-
-  compare-reflexive {{ NatCmp }} zero = refl
-  compare-reflexive {{ NatCmp }} (suc n) = compare-reflexive n
-
 record Functor (F : (A : Set) → Set): Set₁ where
   field
     fmap : {A B : Set} → (A → B) → F A → F B

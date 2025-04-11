@@ -8,6 +8,8 @@ open import Map.Construction
 open import Map.Query
 open import Map.Balance
 open import Map.Map
+open import Helpers.Comparable
+open import Helpers.Pair
 
 ----------------------------------
 -- Deletion/ Update
@@ -74,4 +76,3 @@ alter f k (node s k' v l r) with compare k k'
 
 -- alterF : {K V : Set} → {{Functor F}} → {{Comparable K}} → (Maybe V → F (Maybe V)) → K → Map K V → F (Map K V)
 -- alterF f k m = atKeyImpl Lazy k f m
-

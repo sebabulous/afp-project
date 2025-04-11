@@ -6,6 +6,8 @@ open import Agda.Builtin.Bool
 open import Map.Query
 open import Map.Construction
 open import Map.Map
+open import Helpers.Comparable
+open import Helpers.Pair
 
 private variable
   K V A : Set

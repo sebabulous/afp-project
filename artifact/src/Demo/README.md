@@ -1,0 +1,1 @@
+This directory simply contains the Demo files from the Agda lectures. They are not part of the project deliverable, but simply function as a helper/ reminder for us.

@@ -11,6 +11,8 @@ open import Map.Insertion
 open import Map.DeletionUpdate
 open import Map.Conversion
 open import Map.Map
+open import Helpers.Comparable
+open import Helpers.Pair
 
 -- TO DO: write tests
 

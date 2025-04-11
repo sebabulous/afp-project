@@ -10,6 +10,8 @@ open import Map.Test.Valid
 open import Map.Test.Cases
 open import Map.Test.Balance.BalanceL
 open import Map.Test.Balance.BalanceR
+open import Helpers.Comparable
+open import Helpers.Pair
 
 private variable
   K A : Set

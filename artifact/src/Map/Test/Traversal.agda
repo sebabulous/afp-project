@@ -10,6 +10,8 @@ open import Map.Test.Cases
 open import Map.Test.Valid
 open import Map.Construction
 open import Map.Map
+open import Helpers.Comparable
+open import Helpers.Pair
 open import Map.Balance
 open import Map.Traversal
 open import Map.Conversion

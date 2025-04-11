@@ -7,6 +7,8 @@ open import Agda.Builtin.Equality
 
 open import Map.Map
 open import Map.Insertion
+open import Helpers.Pair
+open import Helpers.Comparable
 
 private variable
   K A : Set

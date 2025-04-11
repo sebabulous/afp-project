@@ -9,6 +9,8 @@ open import Agda.Builtin.Equality
 open import Map.Test.Cases
 open import Map.Construction
 open import Map.Query
+open import Helpers.Comparable
+open import Helpers.Pair
 open import Map.Map
 
 -- %%%%%%%%%%%%%%%%%%%%%%%%% Size functions %%%%%%%%%%%%%%%%%%%%%%%%%

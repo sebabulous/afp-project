@@ -2,8 +2,11 @@ module Map.Query where
 
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Nat
-open import Map.Map
 open import Agda.Builtin.Maybe
+
+open import Map.Map
+open import Helpers.Comparable
+open import Helpers.Pair
 
 private variable
   K V : Set

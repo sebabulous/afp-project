@@ -12,6 +12,8 @@ open import Map.Construction
 open import Map.Conversion
 open import Map.Map
 open import Map.Traversal
+open import Helpers.Comparable
+open import Helpers.Pair
 
 private variable
     V K A M : Set

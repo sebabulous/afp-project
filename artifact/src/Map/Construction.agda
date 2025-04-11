@@ -4,16 +4,14 @@ open import Agda.Builtin.List
 
 open import Map.Map
 open import Map.Insertion
+open import Helpers.Comparable
+open import Helpers.Pair
 
 empty : {K V : Set} -> Map K V
 empty = tip
 
 singleton : {K V : Set} -> K -> V -> Map K V
 singleton k v = node 1 k v tip tip
-
--- does the set collection not exist in agda?
--- fromSet
--- fromArgSet
 
 foldrList : {A B : Set} → (A → B → B) → B → List A → B
 foldrList _ b [] = b

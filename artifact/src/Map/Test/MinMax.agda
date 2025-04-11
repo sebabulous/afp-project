@@ -7,6 +7,8 @@ open import Agda.Builtin.Equality
 
 open import Map.Test.Cases
 open import Map.Construction
+open import Helpers.Pair
+open import Helpers.Comparable
 open import Map.MinMax
 open import Map.Map
 

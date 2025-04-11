@@ -5,6 +5,8 @@ open import Agda.Builtin.Bool
 
 open import Map.Map
 open import Map.Balance
+open import Helpers.Comparable
+open import Helpers.Pair
 open import Map.Test.Cases
 
 private variable

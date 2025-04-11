@@ -4,6 +4,7 @@ open import Agda.Builtin.List
 
 open import Map.Map
 open import Map.Folds
+open import Helpers.Pair
 
 elems : {K V : Set} → Map K V → List V
 elems = foldr _∷_ []
