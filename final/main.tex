@@ -108,31 +108,18 @@ As mentioned several times, the learning curve for this project was steep. If we
 % At the start of this project, none of the group members had any experience with Agda or other interactive theorem provers. Because of this, the (faulty) assumption was made that Agda is a language that can be used for production code. While the tool MAlonzo can be used to compile Agda code to Haskell, the resulting code is - in our experience - not optimised for performance and cannot be compared to code written directly in Haskell. As a result, our original plan of comparing the Agda implementation to the original Haskell implementation turned out to be fun, but not very interesting from a 'results' perspective.
 
 
-Not long after we started implementing code in Agda, we realized Agda was different from many languages in a way that we had not anticipated. This difference, namely the the fact that Agda did not seem to compile in the traditional sense, had us realize that benchmarking too would not work the way we traditionally would.\newline
+Not long after we started implementing code in Agda, we realized Agda was different from many languages in a way that we had not anticipated. This difference, namely the the fact that Agda did not seem to compile in the traditional sense, had us realize that benchmarking too would not work the way we traditionally would.
 
-We had heard that it was possible to transpile Agda code to Haskell, so this seemed to be a logical step to take in order to benchmark our Agda against Haskell. However, this would mean we would in actuality be comparing generated Haskell against normal Haskell, which sounded less meaningful than benchmarking Agda directly. As such, we decided to ask about benchmarking Agda in the next meeting we would have with Lawrence.
- 
-Here we were adviced to try and benchmark Agda as ran from the command line. If we would make sure to delete cache files, this would allow us to time the duration of the resolver for Agda. While this would not get us any data that could meaningfully be compared to Haskell, it would be data that is most closely related to Agda.\newline
+We had heard that it was possible to transpile Agda code to Haskell, so this seemed to be a logical step to take in order to benchmark our Agda against Haskell. However, this would mean we would in actuality be comparing generated Haskell against normal Haskell, which sounded less meaningful than benchmarking Agda directly. As such, we decided to ask about benchmarking Agda in the next meeting we would have with Lawrence.\newline 
+Here we were adviced to try and benchmark Agda as ran from the command line. If we would make sure to delete cache files, this would allow us to time the duration of the resolver for Agda. While this would not get us any data that could meaningfully be compared to Haskell, it would be data that is most closely related to Agda.
 
-Out of curiosity we also still wanted to benchmark the transpiled Agda code against Haskell. For timing Agda from the command line, we were recommended the hyperfine tool, and as such we decided to check it out. We found that hyperfine had support for timing multiple commands in batch, as well as having support for exporting the results. The tool looked promising and as such we prepared a script and started to benchmark our Agda code.\newline
-
+Out of curiosity we also still wanted to benchmark the transpiled Agda code against Haskell. For timing Agda from the command line, we were recommended the hyperfine \cite{hyperfine} tool, and as such we decided to check it out. We found that hyperfine had support for timing multiple commands in batch, as well as having support for exporting the results. The tool looked promising and as such we prepared a script and started to benchmark our Agda code.\newline
 While we were not sure what kind of data to expect, running the script nevertheless proved disappointing. This was not because of the data we got, but rather the data we didn't get; hyperfine reported an error. It appeared hyperfine was unable to find Agda, so we confirmed it should be able to find Agda, and subsequently hardcoded the path to Agda so that absolutely should be found. We ran the script again, once more being told that Agda could not be found.\newline
-
 While it seemed illogical, we figured that something about the script might be the issue, and ran hyperfine from the command line manually. It once again reported that Agda could not be found, yet we were able to run Agda manually from the exact same command prompt. We experimented further and found that hyperfine appeared to report the same error for any input we gave it, and as such we concluded that hyperfine itself was not working correctly. Neither reinstalling, nor building from source was able to get hyperfine to work.
  
- -- TODO: cite hyperfine ?
- 
-For the comparison between the Agda transpiled to Haskell and normal Haskell, we used Criterion. Criterion offers a function that evaluates results to normal form, and makes sure that optimization does not cause evaluation to only happen for the first iteration in a benchmark. The benchmarking is based on the dictionaries repo of the Haskell performance Github organization.
-
-Some of the benchmarking data can be seen in table. -- TODO: reference figure/table
+For the comparison between the Agda transpiled to Haskell and normal Haskell, we used Criterion \cite{criterion}. Criterion offers a function that evaluates results to normal form, and makes sure that optimization does not cause evaluation to only happen for the first iteration in a benchmark. The benchmarking is based on the dictionaries repo of the Haskell performance Github organization \cite{haskellperf}.\newline
+Some of the benchmarking data can be seen in figure \ref{benchmark}.\newline
 Due to how Agda transpiles to Haskell, not all functions were able to adequately be benchmarked.
-
--- TODO: table
-
--- TODO: observations ?
-
--- TODO: cite Criterion ?
--- TODO: cite ``Haskell performance'' dictionaries repo
 
 
 \begin{figure}[htbp]
@@ -162,6 +149,7 @@ Due to how Agda transpiles to Haskell, not all functions were able to adequately
 
   \end{tikzpicture}
   \caption{The runtime for different amounts of inputs for the insert function. As can be seen, Haskell outperforms Agda by several orders of magnitude. It also appears that Haskell has slightly worse than linear complexity, while Agda has exponential complexity.}
+  \label{benchmark}
 \end{figure}
 
 \section{Conclusion}
