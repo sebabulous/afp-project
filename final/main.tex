@@ -2,6 +2,7 @@
 
 \usepackage{float}
 \usepackage{adjustbox}
+\usepackage{pgfplots}
 
 \title{AFP Project: Implementing an efficient version of Data.Map in Agda}
 \author{Sebastiaan Koppen}{Utrecht University, Netherlands}{}{}{}
@@ -125,14 +126,43 @@ For the comparison between the Agda transpiled to Haskell and normal Haskell, we
 
 Some of the benchmarking data can be seen in table. -- TODO: reference figure/table
 Due to how Agda transpiles to Haskell, not all functions were able to adequately be benchmarked.
- 
- -- TODO: table
- 
- -- TODO: observations ?
- 
- -- TODO: cite Criterion ?
- -- TODO: cite ``Haskell performance'' dictionaries repo
 
+-- TODO: table
+
+-- TODO: observations ?
+
+-- TODO: cite Criterion ?
+-- TODO: cite ``Haskell performance'' dictionaries repo
+
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+      \begin{axis}[
+        ymajorgrids=true,
+        ymode=log,
+        ybar,
+        symbolic x coords={10, 50, 100, 150, 200},
+        bar width=8pt,
+        enlarge x limits=0.1,
+        nodes near coords,
+        ylabel={Runtime},
+        xlabel={\# inputs},
+        xtick=data,
+        ytick={1,10,100,1000,10000,100000,1000000,10000000},
+        every node near coord/.append style={font=\tiny, yshift=3.5pt},
+        height=12cm,
+        width=8cm,
+        legend style={at={(0.05,1)},anchor=west}
+      ]
+      \addplot coordinates {(10,22) (50, 55) (100, 112) (150, 173) (200, 244)};
+      \addplot coordinates {(10,857.5) (50, 47770) (100, 346500) (150, 1117000) (200, 3593000)};
+      \legend{Haskell, Agda}
+      \end{axis}
+
+  \end{tikzpicture}
+  \caption{The runtime for different amounts of inputs for the insert function. As can be seen, Haskell outperforms Agda by several orders of magnitude. It also appears that Haskell has slightly worse than linear complexity, while Agda has exponential complexity.}
+\end{figure}
 
 \section{Conclusion}
 
