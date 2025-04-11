@@ -71,7 +71,7 @@ balanceRRetainsElementsR {ml = tip} {mr = node _ _ _ tip (node _ _ _ _ _)} here 
 balanceRRetainsElementsR {ml = tip} {mr = node _ _ _ tip (node _ _ _ _ _)} (thereR prf) = thereR prf
 balanceRRetainsElementsR {ml = tip} {mr = node _ _ _ (node _ _ _ _ _) tip} here = thereR here
 balanceRRetainsElementsR {ml = tip} {mr = node _ _ _ (node _ _ _ _ _) tip} (thereL here) = here
-balanceRRetainsElementsR {ml = tip} {mr = node _ _ _ (node _ _ _ _ _) tip} _ = {! not possible!  !}
+balanceRRetainsElementsR {ml = tip} {mr = node _ _ _ (node _ _ _ _ _) tip} _ = {!  not possible! !}
 balanceRRetainsElementsR {ml = tip} {mr = node _ _ _ (node rls _ _ _ _) (node rrs _ _ _ _)} here with rls < ratio * rrs
 ... | true = here
 ... | false = thereR here

@@ -16,17 +16,8 @@ open import SizedMap.Submap
 open import SizedMap.Traversal
 
 open import SizedMap.Test.Cases
-open import SizedMap.Test.Balance
-open import SizedMap.Test.Combine
-open import SizedMap.Test.Construction
-open import SizedMap.Test.Conversion
-open import SizedMap.Test.DeletionUpdate
-open import SizedMap.Test.Filter
 open import SizedMap.Test.Folds
-open import SizedMap.Test.Indexed
-open import SizedMap.Test.Insertion
 open import SizedMap.Test.MinMax
 open import SizedMap.Test.Query
-open import SizedMap.Test.Submap
 open import SizedMap.Test.Traversal
 

@@ -49,34 +49,10 @@ thm70 {m₁} {n₁} {n} p = _ ⟨⟨ p ≤≡ cong (n +_) (cong (n +_) +zero) �
 thm73 : m₁ + n₁ + suc (suc (m + n)) ≡ suc (m₁ + n₁ + suc (m + n))
 thm73 {m₁} {n₁} {m} {n} = +-swap-suc-3 {m₁} {n₁} {suc (m + n)}
 
-thm75 : (m + n + suc (m + n + suc (m + n + 0))) ≤ (m + n + suc (suc (m + n + suc (suc (m + n + 0)))))
-thm75 {m} {n} = {!   !}
-
-thm74 : suc (m₁ + n₁) ≤ suc (m + n + suc (m + n + suc (m + n + 0))) → (m₁ + n₁) ≤ suc (m + n + suc (suc (m + n + suc (suc (m + n + 0)))))
-thm74 {m₁} {n₁} {m} {n} p = _ ≤⟨ thm13 p ⟩ thm10 {!   !}
-
-thm77 : n ≤ (m₁ + n₁ + (m₁ + n₁ + (m₁ + n₁ + 0))) → (n + (n + (n + 0))) ≤ ((m₁ + n₁ + (m₁ + n₁ + (m₁ + n₁ + 0))) + ((m₁ + n₁ + (m₁ + n₁ + (m₁ + n₁ + 0))) + ((m₁ + n₁ + (m₁ + n₁ + (m₁ + n₁ + 0))) + 0)))
-thm77 {zero} {zero} {zero} p = look₂ refl
-thm77 {zero} {zero} {suc n₁} p = look₁ refl
-thm77 {zero} {suc m₁} {zero} p = look₁ refl
-thm77 {zero} {suc m₁} {suc n₁} p = look₁ refl
-thm77 {suc n} {zero} {zero} (look₁ ())
-thm77 {suc n} {zero} {zero} (look₂ ())
-thm77 {suc n} {zero} {suc n₁} p = {!   !}
-thm77 {suc n} {suc m₁} {zero} p = thm25 {!   !}
-thm77 {suc n} {suc m₁} {suc n₁} p = {!   !}
-
 thm78 : (m + n + suc (m₁ + n₁)) ≤ zero → ⊥
 thm78 {m} {n} {m₁} {n₁} p with _ ⟪ (+-swap-suc-3 {m}) ≡≤ p ⟫
 thm78 {m} {n} {m₁} {n₁} p | look₁ ()
 thm78 {m} {n} {m₁} {n₁} p | look₂ ()
-
--- thm76 : (m₁ + n₁) ≤ (n + (n + (n + 0))) → n ≤ (m₁ + n₁ + (m₁ + n₁ + (m₁ + n₁ + 0))) → (m₁ ≤ (n₁ + (n₁ + (n₁ + 0)))) ∧ (n₁ ≤ (m₁ + (m₁ + (m₁ + 0)))) → suc (m₁ + n₁) ≤ (n + (n + (n + 0)))
--- thm76 {m₁} {n₁} {n} (look₁ x) p₂ (p₃ & p₄) = thm30-2 {m₁ + n₁} {n + (n + (n + 0))} x
--- thm76 {zero} {zero} {zero} (look₂ x) p₂ (p₃ & p₄) = {!   !}
--- thm76 {zero} {suc n₁} {suc n} (look₂ x) p₂ (p₃ & p₄) = {!   !}
--- thm76 {suc m₁} {zero} {suc n} (look₂ x) p₂ (p₃ & p₄) = {!   !}
--- thm76 {suc m₁} {suc n₁} {suc n} (look₂ x) p₂ (p₃ & p₄) = {!   !}
 
 insertDirty : {{Comparable K}} → (k' : K) → (a' : A) → (map : BalancedMap K A (suc n)) → {p : k' ∈k map → ⊥} → SemiBalancedMap K A (suc (suc n))
 insertDirty k' a' (node k a l r {p}) {p₁} with compare k' k

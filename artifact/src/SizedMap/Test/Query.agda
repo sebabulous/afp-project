@@ -15,12 +15,6 @@ open import SizedMap.Map
 
 -- %%%%%%%%%%%%%%%%%%%%%%%%% Size functions %%%%%%%%%%%%%%%%%%%%%%%%%
 
--- _ : null testEmpty ≡ true
--- _ = refl
-
--- _ : null (singleton (Pair.fst KV5a) (Pair.snd KV5a)) ≡ false
--- _ = refl
-
 _ : size testEmpty ≡ 0
 _ = refl
 

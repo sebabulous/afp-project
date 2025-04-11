@@ -4,7 +4,6 @@ open import Agda.Builtin.Nat
 open import Agda.Builtin.Equality
 open import Agda.Builtin.Equality.Rewrite
 open import Agda.Builtin.Bool
-open import Helpers.Void
 open import Agda.Primitive
 
 private variable
@@ -12,6 +11,8 @@ private variable
   ℓA : Set ℓa
   K A B : Set
   m n p m₁ n₁ : Nat
+
+data ⊥ : Set where
 
 cong : (f : A → B) {x y : A} → x ≡ y → f x ≡ f y
 cong f refl = refl
@@ -25,10 +26,6 @@ cong f refl = refl
 +zero-2 {zero} {suc m} = refl
 +zero-2 {suc n} {zero} = cong suc (+zero-2 {n} {zero})
 +zero-2 {suc n} {suc m} = cong suc (+zero-2 {n} {suc m})
-
-
--- {-# REWRITE +zero #-}
-
 
 transport
   : A ≡ B
@@ -79,22 +76,6 @@ instance
 data _≤_ {{_ : Comparable K}} (k : K) (k' : K) : Set where
   look₁ : compare k k' ≡ lt → k ≤ k'
   look₂ : compare k k' ≡ eq → k ≤ k'
-
--- +incr : suc n ≤ suc m ≡ n ≤ m
--- +incr {zero} {zero} prf = look₂ refl
--- +incr {zero} {suc m} prf = look₁ refl
--- +incr {suc n} {zero} prf = {!   !}
--- +incr {suc n} {suc m} prf = {!   !}
-
--- _≤_ : {{Comparable K}} → K → K → Bool
--- k ≤ k' with compare k k'
--- k ≤ k' | gt = false
--- k ≤ k' | _ = true
-
-_≥_ : {{Comparable K}} → K → K → Bool
-k ≥ k' with compare k k'
-k ≥ k' | lt = false
-k ≥ k' | _ = true
 
 
 δ : Nat
@@ -576,19 +557,12 @@ thm' (thereR p) = thereR (thereR p)
 
 +-associative : n₁ + (m + n) ≡ m + n + n₁
 +-associative {zero} {zero} {zero} = refl
--- +-associative {zero} {zero} {suc n} = refl
 +-associative {zero} {zero} {suc n} = sym (cong suc +zero)
--- +-associative {zero} {suc m} {zero} = refl
 +-associative {zero} {suc m} {zero} = sym (cong suc +zero)
--- +-associative {zero} {suc m} {suc n} = refl
 +-associative {zero} {suc m} {suc n} = sym (cong suc +zero)
--- +-associative {suc n₁} {zero} {zero} = refl
 +-associative {suc n₁} {zero} {zero} = cong suc +zero
--- +-associative {suc n₁} {zero} {suc n} = {! cong suc (cong suc (+-sym {n₁} {n})) !}
 +-associative {suc n₁} {zero} {suc n} = cong suc +-swap-suc
--- +-associative {suc n₁} {suc m} {zero} = {! cong suc (cong suc (+-sym {n₁} {m})) !}
 +-associative {suc n₁} {suc m} {zero} = cong suc (sym +-swap-suc)
--- +-associative {suc n₁} {suc m} {suc n} = {! cong suc (cong suc (cong suc (+-associative {n₁} {m} {n}))) !} 
 +-associative {suc n₁} {suc m} {suc n} = cong suc +-swap-suc  
 
 +-associative-2 : m + n + n₁ ≡ m + n₁ + n
@@ -600,14 +574,6 @@ thm' (thereR p) = thereR (thereR p)
 +-associative-2 {suc m} {zero} {suc n₁} = cong suc (+-associative-2 {m} {zero} {suc n₁})
 +-associative-2 {suc m} {suc n} {zero} = cong suc (+-associative-2 {m} {suc n} {zero})
 +-associative-2 {suc m} {suc n} {suc n₁} = cong suc (+-associative-2 {m} {suc n} {suc n₁})
-
-+-associative-helper : m + n ≡ m + n₁ → n ≡ n₁
-+-associative-helper {zero} {zero} {zero} p = refl
-+-associative-helper {zero} {suc n} {suc n₁} p = p
-+-associative-helper {suc m} {zero} {zero} p = refl
-+-associative-helper {suc m} {zero} {suc n₁} p = {!   !}
-+-associative-helper {suc m} {suc n} {zero} p = {!   !}
-+-associative-helper {suc m} {suc n} {suc n₁} p = {!   !}
 
 ≤-associative : (m + n + n₁) ≤ (m + n + m₁) → n₁ ≤ m₁
 ≤-associative {zero} {zero} {n₁} {m₁} p = p

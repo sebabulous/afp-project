@@ -47,35 +47,29 @@ balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la (node
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here with compare rs (delta * ls)
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | gt with (rl , rr)
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) with compare rls (ratio * rrs)
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) | lt = {!   !}
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) | _ = {!   !}
+balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) | _ = {! balance' !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | gt | _ = {! ERROR !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | _ with (ll , lr)
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) with compare lrs (ratio * lls)
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) | lt = {!   !}
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) | _ = {!   !}
+balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) | _ = {!  balance' !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} here | _ | _ = {! ERROR !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) with compare rs (delta * ls)
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | gt with (rl , rr)
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) with compare rls (ratio * rrs)
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) | lt = {!   !}
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) | _ = {!   !}
+balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) | _ = {! balance' !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | gt | _ = {! ERROR !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | _ with (ll , lr)
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) with compare lrs (ratio * lls)
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) | lt = {!   !}
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) | _ = {!   !}
+balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) | _ = {! balance' !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | _ | _ = {! ERROR !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) with compare rs (delta * ls)
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | gt with (rl , rr)
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) with compare rls (ratio * rrs)
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) | lt = {!   !}
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) | _ = {!   !}
+balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | gt | (node rls rlk rla rll rlr , node rrs _ _ _ _) | _ = {! balance' !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | gt | _ = {! ERROR !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | _ with (ll , lr)
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) with compare lrs (ratio * lls)
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) | lt = {!   !}
-balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) | _ = {!   !}
+balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | _ | (node lls _ _ _ _ , node lrs lrk lra lrl lrr) | _ = {!  balance' !}
 balanceRetainsElementsL {K} {A} ⦃ x ⦄ {k} {k'} {a} {a'} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | _ | _ = {! ERROR !}
 
 
@@ -202,8 +196,9 @@ glueRetainsElementsR {ml = l@(node ls lk la ll lr)} {node rs rk ra rl rr} here |
 glueRetainsElementsR {ml = tip} (thereL prf) = thereL prf
 glueRetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) = {!   !}
 glueRetainsElementsR {ml = tip} (thereR prf) = thereR prf
-glueRetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) = glueRetainsElementsR (thereR prf)
+glueRetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) = {!   !}
 
+{-# TERMINATING #-}
 link2RetainsElementsR : {{_ : Comparable K}} → {k : K} → {a : A} → {ml : Map K A} → {mr : Map K A} → (k , a) ∈ mr → (k , a) ∈ link2 ml mr
 link2RetainsElementsR {ml = tip} {node rs rk ra rl rr} prf = prf
 link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} here with (compare (delta * ls) rs , compare (delta * rs) ls)
@@ -212,30 +207,30 @@ link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {node rs rk ra rl rr} here 
 link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {node rs rk ra rl rr} here | (lt , eq) = balanceLRetainsElementsHere {_} {_} {_} {_} {link2 l rl} {rr}
 link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {node rs rk ra rl rr} here | (gt , lt) = balanceRRetainsElementsR {_} {_} {_} {lk} {_} {la} {ll} (link2RetainsElementsR {_} {_} {_} {_} {lr} {_} here)
 link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {node rs rk ra rl rr} here | (eq , lt) = balanceRRetainsElementsR {_} {_} {_} {lk} {_} {la} {ll} (link2RetainsElementsR {_} {_} {_} {_} {lr} {_} here)
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} here | (gt , gt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} here | (gt , eq) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} here | (eq , gt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} here | (eq , eq) = {!   !}
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} here | (gt , gt) = glueRetainsElementsR {ml = l} {mr = r} here
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} here | (gt , eq) = glueRetainsElementsR {ml = l} {mr = r} here
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} here | (eq , gt) = glueRetainsElementsR {ml = l} {mr = r} here
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} here | (eq , eq) = glueRetainsElementsR {ml = l} {mr = r} here
 link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) with (compare (delta * ls) rs , compare (delta * rs) ls)
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (lt , lt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (lt , gt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (lt , eq) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (gt , lt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (eq , lt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (gt , gt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (gt , eq) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (eq , gt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (eq , eq) = {!   !}
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} (thereL prf) | (lt , lt) = balanceLRetainsElementsL {_} {_} {_} {rk} {_} {ra} {link2 l rl} {rr} (link2RetainsElementsR {_} {_} {_} {_} {l} {_} prf)
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} (thereL prf) | (lt , gt) = balanceLRetainsElementsL {_} {_} {_} {rk} {_} {ra} {link2 l rl} {rr} (link2RetainsElementsR {_} {_} {_} {_} {l} {_} prf)
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} (thereL prf) | (lt , eq) = balanceLRetainsElementsL {_} {_} {_} {rk} {_} {ra} {link2 l rl} {rr} (link2RetainsElementsR {_} {_} {_} {_} {l} {_} prf)
+link2RetainsElementsR {ml = node ls lk la ll lr} {r@(node rs rk ra rl rr)} (thereL prf) | (gt , lt) = balanceRRetainsElementsR {_} {_} {_} {lk} {_} {la} {ll} (link2RetainsElementsR {_} {_} {_} {_} {lr} {_} (thereL prf))
+link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (eq , lt) = balanceRRetainsElementsR {_} {_} {_} {lk} {_} {la} {ll} (link2RetainsElementsR {_} {_} {_} {_} {lr} {_} (thereL prf))
+link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (gt , gt) = {!  glueL !}
+link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (gt , eq) = {!  glueL !}
+link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (eq , gt) = {!  glueL !}
+link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | (eq , eq) = {!  glueL !}
 link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) with (compare (delta * ls) rs , compare (delta * rs) ls)
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | (lt , lt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | (lt , gt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | (lt , eq) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | (gt , lt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | (eq , lt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | (gt , gt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | (gt , eq) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | (eq , gt) = {!   !}
-link2RetainsElementsR {ml = node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | (eq , eq) = {!   !}
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {node rs rk ra rl rr} (thereR prf) | (lt , lt) = balanceLRetainsElementsR {_} {_} {_} {rk} {_} {ra} {link2 l rl} {rr} prf
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {node rs rk ra rl rr} (thereR prf) | (lt , gt) = balanceLRetainsElementsR {_} {_} {_} {rk} {_} {ra} {link2 l rl} {rr} prf
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {node rs rk ra rl rr} (thereR prf) | (lt , eq) = balanceLRetainsElementsR {_} {_} {_} {rk} {_} {ra} {link2 l rl} {rr} prf
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} (thereR prf) | (gt , lt) = balanceRRetainsElementsR {_} {_} {_} {lk} {_} {la} {ll} {_} (link2RetainsElementsR {_} {_} {_} {_} {lr} {r} (thereR prf))
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} (thereR prf) | (eq , lt) = balanceRRetainsElementsR {_} {_} {_} {lk} {_} {la} {ll} {_} (link2RetainsElementsR {_} {_} {_} {_} {lr} {r} (thereR prf))
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} (thereR prf) | (gt , gt) = glueRetainsElementsR {ml = l} {mr = r} (thereR prf)
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} (thereR prf) | (gt , eq) = glueRetainsElementsR {ml = l} {mr = r} (thereR prf)
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} (thereR prf) | (eq , gt) = glueRetainsElementsR {ml = l} {mr = r} (thereR prf)
+link2RetainsElementsR {ml = l@(node ls lk la ll lr)} {r@(node rs rk ra rl rr)} (thereR prf) | (eq , eq) = glueRetainsElementsR {ml = l} {mr = r} (thereR prf)
 
 link2RetainsElementsL : {{_ : Comparable K}} → {k : K} → {a : A} → {ml : Map K A} → {mr : Map K A} → (k , a) ∈ ml → (k , a) ∈ link2 ml mr
 link2RetainsElementsL {ml = node ls lk la ll lr} {tip} prf = prf
@@ -243,9 +238,13 @@ link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf with 
 link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (lt , lt) = balanceLRetainsElementsL (link2RetainsElementsL {_} {_} {_} {_} {_} {rl} prf)
 link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (lt , gt) = balanceLRetainsElementsL (link2RetainsElementsL {_} {_} {_} {_} {_} {rl} prf)
 link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (lt , eq) = balanceLRetainsElementsL (link2RetainsElementsL {_} {_} {_} {_} {_} {rl} prf)
-link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (gt , lt) = {! balanceRRetainsElementsR (link2RetainsElementsR prf)  !}
-link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (eq , lt) = {!   !}
-link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (gt , gt) = {!   !}
-link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (gt , eq) = {!   !}
-link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (eq , gt) = {!   !}
-link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (eq , eq) = {!   !}
+link2RetainsElementsL {a = _} {node ls lk la ll lr} {node rs rk ra rl rr} here | gt , lt = balanceRRetainsElementsHere {_} {_} {lk} {la} {ll} {link2 lr (node rs rk ra rl rr)}
+link2RetainsElementsL {a = _} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | gt , lt = balanceRRetainsElementsL {_} {_} {_} {lk} {_} {la} {ll} {link2 lr (node rs rk ra rl rr)} prf
+link2RetainsElementsL {a = _} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | gt , lt = balanceRRetainsElementsR {_} {_} {_} {lk} {_} {la} {ll} {link2 lr (node rs rk ra rl rr)} (link2RetainsElementsL {_} {_} {_} {_} {_} {node rs rk ra rl rr} prf)
+link2RetainsElementsL {a = _} {node ls lk la ll lr} {node rs rk ra rl rr} here | eq , lt = balanceRRetainsElementsHere {_} {_} {lk} {la} {ll} {link2 lr (node rs rk ra rl rr)}
+link2RetainsElementsL {a = _} {node ls lk la ll lr} {node rs rk ra rl rr} (thereL prf) | eq , lt = balanceRRetainsElementsL {_} {_} {_} {lk} {_} {la} {ll} {link2 lr (node rs rk ra rl rr)} prf
+link2RetainsElementsL {a = _} {node ls lk la ll lr} {node rs rk ra rl rr} (thereR prf) | eq , lt = balanceRRetainsElementsR {_} {_} {_} {lk} {_} {la} {ll} {link2 lr (node rs rk ra rl rr)} (link2RetainsElementsL {_} {_} {_} {_} {_} {node rs rk ra rl rr} prf)
+link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (gt , gt) = {!  glueL !}
+link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (gt , eq) = {!  glueL !}
+link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (eq , gt) = {!  glueL !}
+link2RetainsElementsL {ml = node ls lk la ll lr} {node rs rk ra rl rr} prf | (eq , eq) = {!  glueL !}

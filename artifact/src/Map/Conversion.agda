@@ -17,10 +17,6 @@ toAscList : {K V : Set} → Map K V → List (Pair K V)
 toDescList : {K V : Set} → Map K V → List (Pair K V)
 assocs : {K V : Set} → Map K V → List (Pair K V)
 
--- does the set collection not exist in agda?
--- keysSet
--- argSet
-
 toList = toAscList
 
 toAscList = foldrWithKey (λ k v kvs → (k , v) ∷ kvs) []

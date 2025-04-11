@@ -29,7 +29,6 @@ foldlVec f b ((_ , a) ∷ vec) = foldlVec f (f b a) vec
 
 fromVec : {{Comparable K}} → Vec (Pair K A) n → Σ Nat (Map K A)
 fromVec [] = (zero , tip)
--- fromVec ((k , a) ∷ vec) = insert k a (fromVec vec)
 fromVec ((k , a) ∷ vec) with fromVec vec
 fromVec ((k , a) ∷ vec) | (n , map) with insert k a map
 fromVec ((k , a) ∷ vec) | (n , map) | insInsert map' = (suc n , map')

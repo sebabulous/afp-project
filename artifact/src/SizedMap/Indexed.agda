@@ -15,12 +15,6 @@ private variable
   K A : Set
   m n : Nat
 
--- data ReducedMap K A : (m : Nat) → (n : Nat) → Set where
---   reducedAll : Map K A zero → ReducedMap K A zero n
---   reducedSome : (m : Nat) → (n : Nat) → Map K A m → ReducedMap K A m n
--- data ReducedMap K A : (m : Nat) → (n : Nat) → Set where
---   reducedAll : Map K A zero → ReducedMap K A 
-
 lookupIndex : {{Comparable K}} → K → Map K A n → Maybe Nat
 lookupIndex = go 0
   where
@@ -30,14 +24,6 @@ lookupIndex = go 0
     ...                                 | lt = go idx k l
     ...                                 | gt = go (idx + size l + 1) k r
     ...                                 | eq = just (idx + size l)
-
--- findIndex (partial)
-
--- elemAt (partial)
-
--- updateAt (partial)
-
--- deleteAt (partial)
 
 take : {{Comparable K}} → (m : Nat) → Map K A n → Σ Nat (Map K A)
 take i0 m0 with compare i0 (size m0)

@@ -28,28 +28,5 @@ _ = refl
 _ : mapAccumWithKey (λ a k b → primStringAppend a (primStringAppend " " (primStringAppend (primShowNat k) (primStringAppend "-" b))) , primStringAppend b "x") "Everything:" test35 ≡ ("Everything: 3-b 5-a" , test35addX) 
 _ = refl
 
--- Add tests for mapAccumRWithKey
-
--- _ : mapKeys (λ x → x + 1) test35 ≡ test35add1 
--- _ = refl
-
--- _ : mapKeys (λ _ → 3) test35 ≡ singleton (Pair.fst KV3b) (Pair.snd KV5a)
--- _ = refl
-
--- _ : mapKeys (λ _ → 5) test35 ≡ singleton (Pair.fst KV5a) (Pair.snd KV5a) 
--- _ = refl
-
--- _ : mapKeysWith primStringAppend (λ _ → 3) test35 ≡ singleton 3 "ab" 
--- _ = refl
-
--- _ : mapKeysWith primStringAppend (λ _ → 5) test35 ≡ singleton 5 "ab" 
--- _ = refl
-
 _ : mapKeysMonotonic (λ k → k * 2) test35 ≡ test35times2 
 _ = refl
-
--- _ : valid (mapKeysMonotonic (λ k → k * 2) test35) ≡ true 
--- _ = {!  refl !}
-
--- _ : valid (mapKeysMonotonic (λ _ → 1) test35) ≡ false 
--- _ = {!  refl !}

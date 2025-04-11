@@ -1,8 +1,10 @@
 module Helpers.List where
 
 open import Agda.Builtin.List
+open import Agda.Builtin.Nat
 
 open import Helpers.Comparable
+open import Helpers.Pair
 
 private variable
   K A : Set

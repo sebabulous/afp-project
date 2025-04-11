@@ -30,8 +30,6 @@ _ = refl
 _ : findMax test53 ≡ KV5a
 _ = refl
 
--- Test error findMin and findMax
-
 _ : deleteMin test537 ≡ test57
 _ = refl
 
@@ -71,23 +69,11 @@ _ = refl
 _ : minView test53 ≡ (Pair.snd KV3b , singleton (Pair.fst KV5a) (Pair.snd KV5a))
 _ = refl
 
--- _ : minView testEmpty ≡ nothing
--- _ = refl
-
 _ : maxView test53 ≡ (Pair.snd KV5a , singleton (Pair.fst KV3b) (Pair.snd KV3b))
 _ = refl
-
--- _ : maxView testEmpty ≡ nothing
--- _ = refl
 
 _ : minViewWithKey test53 ≡ (KV3b , singleton (Pair.fst KV5a) (Pair.snd KV5a)) 
 _ = refl
 
--- _ : minViewWithKey testEmpty ≡ nothing
--- _ = refl
-
 _ : maxViewWithKey test53 ≡ (KV5a , singleton (Pair.fst KV3b) (Pair.snd KV3b)) 
 _ = refl
-
--- _ : maxViewWithKey testEmpty ≡ nothing
--- _ = refl

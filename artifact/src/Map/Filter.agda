@@ -30,10 +30,6 @@ filter p m = filterWithKey (λ _ x → p x) m
 filterKeys : {K V : Set} → {{Comparable K}} → (K → Bool) → Map K V → Map K V
 filterKeys p m = filterWithKey (λ k _ → p k) m
 
--- restrictKeys : {{Comparable K}} → Map K V → Set K → Map K V
-
--- withoutKeys : {{Comparable K}} → Map K V → Set K → Map K V
-
 record StrictTriple (A B C : Set) : Set where
   field
     st1 : A

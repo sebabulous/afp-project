@@ -12,6 +12,7 @@ private variable
   K V : Set
   n : Nat
 
+
 insert : {{Comparable K}} → K → V → Map K V n → MapIns K V n
 insert = go
   where

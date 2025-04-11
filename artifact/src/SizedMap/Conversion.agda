@@ -6,19 +6,19 @@ open import SizedMap.Map
 open import SizedMap.Folds
 open import Helpers.Comparable
 open import Helpers.Pair
+open import Helpers.List
 
 private variable
   K V : Set
   n : Nat
 
 elems : Map K V n → Vec V n
--- elems = foldr _∷_ []
 elems tip = []
 elems (node k a l r) = elems l ++ (a ∷ elems r)
 
--- foldr : {V K A : Set} → (A → V → V) → V → Map K A n → V
--- foldr f v tip = v
--- foldr f v (node k a l r) = foldr f (f a (foldr f v r)) l
+keys : Map K V n → Vec K n
+keys tip = []
+keys (node k _ l r) = keys l ++ (k ∷ keys r)
 
 toVec : Map K V n → Vec (Pair K V) n
 toVec tip = []

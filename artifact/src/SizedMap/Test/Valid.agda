@@ -20,18 +20,6 @@ balanced (node _ _ l r) with (compare (size l + size r) 1 , (compare (size l) (d
 balanced (node _ _ l r) | (gt , (gt , _)) = false
 balanced (node _ _ l r) | (gt , (_ , gt)) = false
 balanced (node _ _ l r) | _ = balanced l && balanced r
--- balanced (node _ _ l r) =  (check1 || check2) && balanced l && balanced r
---   where
---     check1 : Bool
---     check1 with compare (size l + size r) 1
---     ...    | gt = false
---     ...    | _ = true
-
---     check2 : Bool
---     check2 with (compare (size l) (delta * size r) , compare (size r) (delta * size l))
---     ...    | (gt , _) = false
---     ...    | (_ , gt) = false
---     ...    | (_ , _) = true
 
 ordered : {{Comparable K}} → Map K A n → Bool
 ordered t = bounded (λ _ → true) (λ _ → true) t
@@ -50,21 +38,5 @@ ordered t = bounded (λ _ → true) (λ _ → true) t
         ...    | gt = true
         ...    | _ = false
 
--- slowSize : Map K A → Maybe Nat
--- slowSize tip = just 0
--- slowSize (node sz _ _ l r) with (slowSize l , slowSize r)
--- ...                        | (nothing , _) = nothing
--- ...                        | (_ , nothing) = nothing
--- ...                        | (just ls , just rs) with compare sz (ls + rs + 1)
--- ...                                              | eq = just sz
--- ...                                              | _ = nothing
-
--- validsize : Map K A → Bool
--- validsize t with slowSize t
--- ...         | nothing = false
--- ...         | just _ = true
-
--- valid : {{Comparable K}} → Map K A → Bool
--- valid t = balanced t && ordered t && validsize t
 valid : {{Comparable K}} → Map K A n → Bool
 valid t = balanced t && ordered t

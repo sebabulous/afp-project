@@ -20,25 +20,6 @@ data StrictPair (A B : Set): Set where
 
 infixr 1 _:*:_
 
--- cong : (f : A → B) {x y : A} → x ≡ y → f x ≡ f y
--- cong f refl = refl
-
--- +zero : m + zero ≡ m
--- +zero {m = zero} = refl
--- +zero {m = suc m} = cong suc +zero
-
--- +suc : m + (suc n) ≡ suc (m + n)
--- +suc {m = zero} = refl
--- +suc {m = suc m} = cong suc +suc
-
--- {-# REWRITE +zero +suc #-}
-
--- +associative : m + (m1 + n1) ≡ m + m1 + n1
--- +associative {m = zero} = refl
--- +associative {m = suc m} = cong suc (+associative {m = m})
-
--- {-# REWRITE +zero +suc +associative #-}
-
 fst : StrictPair A B → A
 fst (a :*: _) = a
 
@@ -89,7 +70,7 @@ balanceL : {{Comparable K}} → K → V → Map K V m → Map K V n → Map K V 
 balanceL k v tip tip = node k v tip tip
 
 balanceL k v l@(node _ _ tip tip) tip = node k v l tip
-balanceL k v (node lk lv tip (node lrk lrv _ _)) tip = {!   !}
+balanceL k v (node lk lv tip (node lrk lrv _ _)) tip = {! undefined  !}
 balanceL k v (node lk lv ll@(node _ _ _ _) tip) tip = node lk lv ll (node k v tip tip)
 balanceL k v (node lk lv ll@(node _ _ _ _) lr@(node lrk lrv lrl lrr)) tip with compare (size lr) (ratio * (size ll))
 ...                                                                                  | lt = node lk lv ll (node k v lr tip)
@@ -106,7 +87,7 @@ balanceR k v tip tip = node k v tip tip
 
 balanceR k v tip r@(node _ _ tip tip) = node k v tip r
 balanceR k v tip (node rk rv tip rr@(node _ _ _ _)) = node rk rv (node k v tip tip) rr
-balanceR k v tip (node rk rv (node rlk rlv _ _) tip) = {!   !}
+balanceR k v tip (node rk rv (node rlk rlv _ _) tip) = {!  undefined !}
 balanceR k v tip (node rk rv rl@(node rlk rlv rll rlr) rr@(node _ _ _ _)) with (size rl) < ratio * (size rr)
 ...                                                                                  | true = node rk rv (node k v tip rl) rr
 ...                                                                                  | false = node rlk rlv (node k v tip rll) (node rk rv rlr rr)

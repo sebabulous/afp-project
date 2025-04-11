@@ -45,8 +45,7 @@ balanceLRetainsElementsL : {{_ : Comparable K}} → {k k' : K} → {a a' : A} �
 balanceLRetainsElementsL {ml = node ls lk la tip tip} {tip} prf = thereL prf
 balanceLRetainsElementsL {ml = node ls lk la tip (node _ _ _ _ _)} {tip} here = thereL here
 balanceLRetainsElementsL {ml = node ls lk la tip (node _ _ _ _ _)} {tip} (thereR here) = here
-balanceLRetainsElementsL {ml = node ls lk la tip (node _ _ _ _ _)} {tip} (thereR (thereL prf)) = {! not possible  !}
-balanceLRetainsElementsL {ml = node ls lk la tip (node _ _ _ _ _)} {tip} (thereR (thereR prf)) = {! not possible!  !}
+balanceLRetainsElementsL {ml = node ls lk la tip (node _ _ _ _ _)} {tip} (thereR prf) = {!  not possible !}
 balanceLRetainsElementsL {ml = node ls lk la (node _ _ _ _ _) tip} {tip} here = here
 balanceLRetainsElementsL {ml = node ls lk la (node _ _ _ _ _) tip} {tip} (thereL prf) = thereL prf
 balanceLRetainsElementsL {ml = node ls lk la (node lls _ _ _ _) (node lrs _ _ _ _)} {tip} here with compare lrs (ratio * lls)
