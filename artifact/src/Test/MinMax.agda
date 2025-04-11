@@ -42,50 +42,50 @@ _ = refl
 _ : deleteFindMax test537 ≡ KV7c , test53
 _ = refl
 
-_ : updateMin (λ a -> just (primStringAppend "3:"  a)) test53 ≡ test35update3
+_ : updateMin (λ a -> just (primStringAppend "3:"  a)) test53 ≡ modId test35update3
 _ = refl
 
-_ : updateMin (λ a -> nothing) test53 ≡ singleton (Pair.fst KV5a) (Pair.snd KV5a)
+_ : updateMin (λ a -> nothing) test53 ≡ modDelete (singleton (Pair.fst KV5a) (Pair.snd KV5a))
 _ = refl
 
-_ : updateMax (λ a -> just (primStringAppend "5:"  a)) test53 ≡ test35update5
+_ : updateMax (λ a -> just (primStringAppend "5:"  a)) test53 ≡ modId test35update5
 _ = refl
 
-_ : updateMax (λ a -> nothing) test53 ≡ singleton (Pair.fst KV3b) (Pair.snd KV3b)
+_ : updateMax (λ a -> nothing) test53 ≡ modDelete (singleton (Pair.fst KV3b) (Pair.snd KV3b))
 _ = refl
 
-_ : updateMinWithKey (\ k a -> just (primStringAppend (primShowNat k) (primStringAppend ":" a))) test53 ≡ test35update3
+_ : updateMinWithKey (\ k a -> just (primStringAppend (primShowNat k) (primStringAppend ":" a))) test53 ≡ modId test35update3
 _ = refl
 
-_ : updateMinWithKey (\ _ _ -> nothing) test53 ≡ singleton (Pair.fst KV5a) (Pair.snd KV5a)
+_ : updateMinWithKey (\ _ _ -> nothing) test53 ≡ modDelete (singleton (Pair.fst KV5a) (Pair.snd KV5a))
 _ = refl
 
-_ : updateMaxWithKey (\ k a -> just (primStringAppend (primShowNat k) (primStringAppend ":" a))) test53 ≡ test35update5
+_ : updateMaxWithKey (\ k a -> just (primStringAppend (primShowNat k) (primStringAppend ":" a))) test53 ≡ modId test35update5
 _ = refl
 
-_ : updateMaxWithKey (\ _ _ -> nothing) test53 ≡ singleton (Pair.fst KV3b) (Pair.snd KV3b)
+_ : updateMaxWithKey (\ _ _ -> nothing) test53 ≡ modDelete (singleton (Pair.fst KV3b) (Pair.snd KV3b))
 _ = refl
 
-_ : minView test53 ≡ just (Pair.snd KV3b , singleton (Pair.fst KV5a) (Pair.snd KV5a))
+_ : minView test53 ≡ (Pair.snd KV3b , singleton (Pair.fst KV5a) (Pair.snd KV5a))
 _ = refl
 
-_ : minView testEmpty ≡ nothing
+-- _ : minView testEmpty ≡ nothing
+-- _ = refl
+
+_ : maxView test53 ≡ (Pair.snd KV5a , singleton (Pair.fst KV3b) (Pair.snd KV3b))
 _ = refl
 
-_ : maxView test53 ≡ just (Pair.snd KV5a , singleton (Pair.fst KV3b) (Pair.snd KV3b))
+-- _ : maxView testEmpty ≡ nothing
+-- _ = refl
+
+_ : minViewWithKey test53 ≡ (KV3b , singleton (Pair.fst KV5a) (Pair.snd KV5a)) 
 _ = refl
 
-_ : maxView testEmpty ≡ nothing
+-- _ : minViewWithKey testEmpty ≡ nothing
+-- _ = refl
+
+_ : maxViewWithKey test53 ≡ (KV5a , singleton (Pair.fst KV3b) (Pair.snd KV3b)) 
 _ = refl
 
-_ : minViewWithKey test53 ≡ just (KV3b , singleton (Pair.fst KV5a) (Pair.snd KV5a)) 
-_ = refl
-
-_ : minViewWithKey testEmpty ≡ nothing
-_ = refl
-
-_ : maxViewWithKey test53 ≡ just (KV5a , singleton (Pair.fst KV3b) (Pair.snd KV3b)) 
-_ = refl
-
-_ : maxViewWithKey testEmpty ≡ nothing
-_ = refl
+-- _ : maxViewWithKey testEmpty ≡ nothing
+-- _ = refl

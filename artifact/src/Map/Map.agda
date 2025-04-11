@@ -1,13 +1,17 @@
 module Map.Map where
 
 open import Agda.Builtin.Nat
+open import Agda.Builtin.List
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Equality
+open import Agda.Builtin.Equality.Rewrite
 
 
 private variable
   K A B : Set
-  m n : Nat
+  m n m₁ n₁ : Nat
+  k : K
+  -- ks : List K
 
 _||_ : Bool → Bool → Bool
 true || _ = true
@@ -75,12 +79,50 @@ record Monoid (M : Set) : Set where
 
 open Monoid {{...}} public
 
--- data Map (K : Set) (V : Set) : Set where
---   tip : Map K V
---   node : Nat → K → V → Map K V → Map K V → Map K V
+data Vec A : Nat → Set where
+  [] : Vec A zero
+  _∷_ : A → Vec A n → Vec A (n + 1)
+
+data _∈Vec_ (a : A) : Vec A (suc n) → Set where
+  here : {vec : Vec A (suc n)} → a ∈Vec (a ∷ vec)
+  there : ∀{a'} → {vec : Vec A (suc n)} → a ∈Vec vec → a ∈Vec (a' ∷ vec)
+
+cong : (f : A → B) {x y : A} → x ≡ y → f x ≡ f y
+cong f refl = refl
+
++zero : m + zero ≡ m
++zero {m = zero} = refl
++zero {m = suc m} = cong suc +zero
+
++suc : m + (suc n) ≡ suc (m + n)
++suc {m = zero} = refl
++suc {m = suc m} = cong suc +suc
+
+{-# REWRITE +zero +suc #-}
+
++associative : m + (m₁ + n₁) ≡ m + m₁ + n₁
++associative {m = zero} = refl
++associative {m = suc m} {m₁} {n₁} = cong suc (+associative {_} {m₁} {n₁})
+
+{-# REWRITE +associative #-}
+
+_++_ : {A : Set} → (xs : Vec A m) → (ys : Vec A n) → Vec A (m + n)
+[] ++ ys = ys
+(x ∷ xs) ++ ys = x ∷ (xs ++ ys)
+
 data Map (K : Set) (V : Set) : Nat → Set where
   tip : Map K V zero
-  node : {m n : Nat} → Nat → K → V → Map K V m → Map K V n → Map K V (suc (m + n))
+  node : {m n : Nat} → (k : K) → V → Map K V m → Map K V n → Map K V (suc (m + n))
+
+-- data _∈k_ {A : Set} {ks : Vec K (suc n)} (k : K) : Map K A ks → Set where
+--   isTrue : ∀{map} → k ∈Vec ks → _∈k_ {ks = ks} k map
+
+-- data _∈_ {lks : Vec K m} {rks : Vec K n} (a : A) : Map K A (k ∷ (lks ++ rks)) → Set where
+--   here : {l : Map K A lks} → {r : Map K A rks} → a ∈ node {_} {_} {_} {_} {_} {_} {m} {n} k a l r
+--   thereL : ∀{x a'} → {lks : Vec K m} → {rks : Vec K n} → {l : Map K A lks} → {r : Map K A rks} → a ∈ l → a ∈ (node k a' l r)
+  -- thereL : ∀{s k n a'} → {l : Map K A (suc m)}{r : Map K A n} → a ∈ l → a ∈ (node k a' l r)
+  -- thereR : ∀{s k m a'} → {l : Map K A m}{r : Map K A (suc n)} → a ∈ r → a ∈ (node k a' l r)
+
 
 record Equal (A : Set) : Set where
   field
@@ -88,19 +130,11 @@ record Equal (A : Set) : Set where
 
 open Equal {{...}} public
 
--- instance
---   EqMap : ∀{n} {K V : Set} → {{Equal K}} → {{Equal V}} → Equal (Map K V n)
---   equal {{ EqMap }} tip tip = true
---   equal {{ EqMap }} (node s k v l r) (node s' k' v' l' r') = s == s' && equal k k' && equal v v' && equal l l' && equal r r'
---   equal {{ EqMap }} _ _ = false
-
-
-
 data MapMod K A : Nat → Set where
   modDelete : Map K A n → MapMod K A (suc n)
   modInsert : Map K A (suc n) → MapMod K A n
   modId : Map K A n → MapMod K A n
 
 data MapIns K A : Nat → Set where
-  insInsert : Map K A (suc n) → MapIns K A n
+  insInsert : {k : K} → Map K A (suc n) → MapIns K A n
   insId : Map K A n → MapIns K A n

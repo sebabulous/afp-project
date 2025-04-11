@@ -2,6 +2,8 @@ module Map.Filter where
 
 open import Agda.Builtin.Maybe
 open import Agda.Builtin.Sigma
+open import Agda.Builtin.Equality
+open import Agda.Builtin.Equality.Rewrite
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 open import Agda.Builtin.List
@@ -16,7 +18,7 @@ data Either (A B : Set) : Set where
   right : B → Either A B
 
 private variable
-  K A W Q : Set
+  K A B W Q : Set
   m n : Nat
 
 -- https://agda.github.io/agda-stdlib/v2.1/Data.Vec.html
@@ -28,11 +30,11 @@ private variable
 
 filterWithKey : {{Comparable K}} → (K → A → Bool) → Map K A n → Σ Nat (Map K A)
 filterWithKey _ tip = zero , tip
-filterWithKey p (node _ kx x l r) with p kx x
+filterWithKey p (node kx x l r) with p kx x
 ... | true with filterWithKey p l
 ...   | record {fst = ls ; snd = lm} with filterWithKey p r
 ...     | record {fst = rs ; snd = rm} = record {fst = suc (ls + rs) ; snd = link kx x lm rm}
-filterWithKey p (node _ kx x l r) | false with filterWithKey p l
+filterWithKey p (node kx x l r) | false with filterWithKey p l
 ...   | record {fst = ls ; snd = lm} with filterWithKey p r
 ...     | record {fst = rs ; snd = rm} = record {fst = ls + rs ; snd = link2 lm rm}
 
@@ -46,7 +48,8 @@ filterKeys p m = filterWithKey (λ k _ → p k) m
 
 -- -- withoutKeys : {{Comparable K}} → Map K A → Set K → Map K A
 
--- partitionWithKey : {{Comparable K}} → (K → A → Bool) → Map K A → Pair (Map K A) (Map K A)
+
+-- partitionWithKey : {{Comparable K}} → {s : Nat} → (K → A → Bool) → Map K A s → {m + n ≡ s} → Pair (Map K A m) (Map K A n)
 -- partitionWithKey p0 t0 = toPair (go p0 t0)
 --   where
 --     go : {{Comparable K}} → (K → A → Bool) → Map K A → StrictPair (Map K A) (Map K A)
@@ -111,7 +114,14 @@ filterKeys p m = filterWithKey (λ k _ → p k) m
 --     ...                    | (gt , _ , rr) = link kx x l (fst rr) :*: (snd rr)
 --     ...                    | (eq , _ , _) = l :*: r
 
--- splitLookup : {{Comparable K}} → K → Map K A → Triple (Map K A) (Maybe A) (Map K A)
+splitLookup : {{Comparable K}} → {s : Nat} → K → Map K A s → Σ (Pair Nat Nat) (λ (m , n) → Triple (Map K A m) (Maybe A) (Map K A n))
+splitLookup k tip = ((zero , zero) , _,_,_ tip nothing tip)
+splitLookup k' (node k a l r) with compare k' k
+splitLookup k' (node k a l r) | lt with splitLookup k l
+splitLookup k' (node k a l r) | lt | ((m' , n') , (_,_,_ lt' z gt')) = ((m' , suc (n' + size r)) , (_,_,_ lt' z (link k a gt' r)))
+splitLookup k' (node k a l r) | gt with splitLookup k r
+splitLookup k' (node k a l r) | gt | ((m' , n') , (_,_,_ lt' z gt')) = ((suc (size l + m') , n') , (_,_,_ (link k a l lt') z gt'))
+splitLookup k' (node k a l r) | eq = ((size l , size r) , (_,_,_ l (just a) r))
 -- splitLookup k0 m = let record {st1 = l ; st2 = mv ; st3 = r} = go k0 m in (l , mv , r)
 --   where
 --     go : {{Comparable K}} → K → Map K A → StrictTriple (Map K A) (Maybe A) (Map K A)
@@ -123,4 +133,4 @@ filterKeys p m = filterWithKey (λ k _ → p k) m
 
 -- splitRoot : Map K A → List (Map K A)
 -- splitRoot tip = []
--- splitRoot (node _ k v l r) = l ∷ singleton k v ∷ r ∷ []
+-- splitRoot (node _ k v l r) = l ∷ singleton k v ∷ r ∷ [] 
