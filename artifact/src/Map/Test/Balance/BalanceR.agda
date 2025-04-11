@@ -1,11 +1,11 @@
-module Test.Balance.BalanceR where
+module Map.Test.Balance.BalanceR where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 
 open import Map.Map
 open import Map.Balance
-open import Test.Cases
+open import Map.Test.Cases
 
 private variable
   K A : Set

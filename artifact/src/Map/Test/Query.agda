@@ -1,4 +1,4 @@
-module Test.Query where
+module Map.Test.Query where
 
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Nat
@@ -6,7 +6,7 @@ open import Agda.Builtin.String
 open import Agda.Builtin.Maybe
 open import Agda.Builtin.Equality
 
-open import Test.Cases
+open import Map.Test.Cases
 open import Map.Construction
 open import Map.Query
 open import Map.Map

@@ -1,4 +1,4 @@
-module Test.Folds where
+module Map.Test.Folds where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.String
@@ -6,7 +6,7 @@ open import Agda.Builtin.Equality
 open import Agda.Builtin.List
 open import Agda.Builtin.Strict
 
-open import Test.Cases
+open import Map.Test.Cases
 open import Map.Folds
 open import Map.Construction
 open import Map.Conversion

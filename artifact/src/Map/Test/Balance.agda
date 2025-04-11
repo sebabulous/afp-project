@@ -1,4 +1,4 @@
-module Test.Balance where
+module Map.Test.Balance where
 
 open import Agda.Builtin.Equality
 open import Agda.Builtin.Bool
@@ -6,10 +6,10 @@ open import Agda.Builtin.Nat
 
 open import Map.Map
 open import Map.Balance
-open import Test.Valid
-open import Test.Cases
-open import Test.Balance.BalanceL
-open import Test.Balance.BalanceR
+open import Map.Test.Valid
+open import Map.Test.Cases
+open import Map.Test.Balance.BalanceL
+open import Map.Test.Balance.BalanceR
 
 private variable
   K A : Set

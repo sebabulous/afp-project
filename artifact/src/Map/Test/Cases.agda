@@ -1,4 +1,4 @@
-module Test.Cases where
+module Map.Test.Cases where
 
 open import Agda.Builtin.Bool
 open import Agda.Builtin.Nat

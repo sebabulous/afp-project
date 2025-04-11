@@ -1,4 +1,4 @@
-module Test.Insertion where
+module Map.Test.Insertion where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Sigma

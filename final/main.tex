@@ -23,10 +23,18 @@
 \maketitle
 
 \section*{Introduction}
+Data.Map is a widely used Haskell module from the containers package. It provides an optimized implementation of a dictionary-like data structure (i.e. a mapping from keys to values), based on the concept of binary search trees of bounded balance. In our initial project proposal, we suggested that such a data structure would be a useful addition to Agda. Our reasoning was that a \textit{high-quality} package would be a useful addition to Agda, as it could provide other users with a reliable, fast implementation. While we still believe in the usefulness of this implementation, we have come to learn that our initial reasoning was based on incomplete knowledge of Agda. More specifically, we now understand that speed is not a focus point of Agda, partly because it does not have a run-time in the way most languages do. Fortunately, this does not mean that our implementation is useless. A correct-by-design implementation of Data.Map can function as a tool to prove properties over Data.Map and - by extension - as a tool for identifying vulnerabilities in the data structure.
+
+The rest of this report is layed out as follows. We will first discuss our implementation of Data.Map, as well as the sized variant and sized-balanced variant we made. We then discuss what obstacles we encountered during the project as well as some noticable things we learned. Finally we will discuss some vulnerabilities we identified in the Haskell-implementation.
+
 
 \section*{Agda}
 \subsection*{Na\"ive implementation}
-When working with binary search trees, a compromise must be made between time it takes to find an element (which of course depends on how well-balanced the tree is) and how frequently the tree should be rebalanced. What makes binary trees of bounded balance unique is that they cary a parameter that controls when a rebalancing is triggered. A first implementation of this can be found in the file \texttt{DeletionUpdate.agda}, where the constants \texttt{delta} and \texttt{ratio} are introduced. We would be interested in varying these constants as part of our performance testing, as the optimal values found by the creators of Data.Map do not seem to coincide with those found by the authors of the corresponding paper.
+An initial implementation, based on its Haskell equivalent, can be found at \texttt{src/Map} directory. Tests and proofs corresponding to each module can be found at \texttt{src/Map/Test}. A second implementation, where the size of the map is incorporated in its type, can be found at \texttt{src/SizedMap}. Finally, an implementation incorporating both the size anf a proof of balance, can be found at \texttt{src/BalancedMap}.
+
+When working with binary search trees, a compromise must be made between time it takes to find an element - which depends on how well-balanced the tree is - and the frequency with which the tree is rebalanced. What makes binary trees of bounded balance unique is that they carry a parameter that controls when a rebalancing is triggered. A first implementation of this can be found in the file \texttt{Map.Balance.agda}, where the constants \texttt{delta} and \texttt{ratio} are introduced. The usage of these constants corresponds to the description given by Stephen Adams \cite{adams1993functional} (although it must be pointed out that the creators of the Haskell implementation point out a small error in this paper). The \texttt{Map.Balance} module contains several functions that restore the balance of some (partially) tree. Some functions, such as \texttt{balanceL} and \texttt{balanceR}, assume that one of the sub-trees of the input is already balanced, allowing for faster rebalancing.
+
+% We would be interested in varying these constants as part of our performance testing, as the optimal values found by the creators of Data.Map do not seem to coincide with those found by the authors of the corresponding paper.
 
 \subsection*{Sized implementation}
 
@@ -62,4 +70,5 @@ foldr(*$\equiv$*)foldrList-elems f z (node x k v l r) (*$\equiv$*)
 
 \section*{Performance}
 
+\bibliography{main}
 \end{document}

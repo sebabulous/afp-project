@@ -1,11 +1,11 @@
-module Test.MinMax where
+module Map.Test.MinMax where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.String
 open import Agda.Builtin.Maybe
 open import Agda.Builtin.Equality
 
-open import Test.Cases
+open import Map.Test.Cases
 open import Map.Construction
 open import Map.MinMax
 open import Map.Map

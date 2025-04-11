@@ -1,12 +1,12 @@
-module Test.Filter where
+module Map.Test.Filter where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
 open import Agda.Builtin.String
 open import Agda.Builtin.Equality
 
-open import Test.Cases
-open import Test.Balance
+open import Map.Test.Cases
+open import Map.Test.Balance
 open import Map.Filter
 open import Map.Map
 

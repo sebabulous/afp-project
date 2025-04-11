@@ -1,10 +1,10 @@
-module Test.Submap where
+module Map.Test.Submap where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.String
 open import Agda.Builtin.Equality
 
-open import Test.Cases
+open import Map.Test.Cases
 open import Map.Submap
 open import Map.Map
 

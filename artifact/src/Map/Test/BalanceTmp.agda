@@ -1,11 +1,11 @@
-module Test.BalanceTmp where
+module Map.Test.BalanceTmp where
 
 open import Agda.Builtin.Nat
 
 open import Map.Map
 open import Map.Balance
-open import Test.Cases
-open import Test.Balance
+open import Map.Test.Cases
+open import Map.Test.Balance
 
 private variable
   K A : Set

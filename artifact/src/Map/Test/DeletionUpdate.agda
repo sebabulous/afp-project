@@ -1,11 +1,11 @@
-module Test.DeletionUpdate where
+module Map.Test.DeletionUpdate where
 
 open import Agda.Builtin.List
 open import Agda.Builtin.Nat
 open import Agda.Builtin.String
 open import Agda.Builtin.Equality
 
-open import Test.Cases
+open import Map.Test.Cases
 open import Map.Construction
 open import Map.Insertion
 open import Map.DeletionUpdate

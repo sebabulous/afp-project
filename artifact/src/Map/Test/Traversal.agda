@@ -1,4 +1,4 @@
-module Test.Traversal where
+module Map.Test.Traversal where
 
 open import Agda.Builtin.Nat
 open import Agda.Builtin.Bool
@@ -6,12 +6,13 @@ open import Agda.Builtin.String
 open import Agda.Builtin.Maybe
 open import Agda.Builtin.Equality
 
-open import Test.Cases
-open import Test.Valid
+open import Map.Test.Cases
+open import Map.Test.Valid
 open import Map.Construction
 open import Map.Map
 open import Map.Balance
 open import Map.Traversal
+open import Map.Conversion
 
 _ : map (λ x → primStringAppend x "x") test35 ≡ test35addX
 _ = refl
@@ -25,8 +26,8 @@ _ = refl
 _ : traverseWithKey (λ k v → if odd k then just (suc v) else nothing) test2Nat ≡ nothing
 _ = refl
 
-_ : traverseMaybeWithKey (λ k v → if odd k then just (just (suc v)) else nothing) test15Nat ≡ just test15SucNat --node 2 1 2 tip (node 1 5 6 tip tip)
-_ = {!  refl !}
+_ : fmap toAscList (traverseMaybeWithKey (λ k v → if odd k then just (just (suc v)) else nothing) test15Nat) ≡ fmap toAscList (just test15SucNat) --node 2 1 2 tip (node 1 5 6 tip tip)
+_ = refl
 
 _ : traverseMaybeWithKey (λ k v → if odd k then just (just (suc v)) else nothing) test2Nat ≡ nothing
 _ = refl
