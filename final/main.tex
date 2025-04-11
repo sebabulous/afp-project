@@ -1,0 +1,65 @@
+\documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{template/lipics-v2021}
+
+\usepackage{float}
+\usepackage{adjustbox}
+
+\title{AFP Project: Implementing an efficient version of Data.Map in Agda}
+\author{Sebastiaan Koppen}{Utrecht University, Netherlands}{}{}{}
+\author{Myrthe Streep}{Utrecht University, Netherlands}{}{}{}
+\author{Daan van Westerlaak}{Utrecht University, Netherlands}{}{}{}
+
+\authorrunning{M.D. Streep, S. Koppen, D. van Westerlaak}
+
+\date{April 2025}
+
+\bibliographystyle{acm}
+
+\lstset{
+  escapeinside={(*}{*)},
+}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+\section*{Agda}
+\subsection*{Na\"ive implementation}
+When working with binary search trees, a compromise must be made between time it takes to find an element (which of course depends on how well-balanced the tree is) and how frequently the tree should be rebalanced. What makes binary trees of bounded balance unique is that they cary a parameter that controls when a rebalancing is triggered. A first implementation of this can be found in the file \texttt{DeletionUpdate.agda}, where the constants \texttt{delta} and \texttt{ratio} are introduced. We would be interested in varying these constants as part of our performance testing, as the optimal values found by the creators of Data.Map do not seem to coincide with those found by the authors of the corresponding paper.
+
+\subsection*{Sized implementation}
+
+\subsection*{Agda as proof assistant}
+Agda was also used as proof assistant for the implemented functions, the implementations are inspired by the examples and equalities of the Hackage page of \href{https://hackage.haskell.org/package/containers-0.8/docs/Data-Map-Lazy.html}{Data.Map.Lazy}. 
+Some functions are supposed to work on all instances of its record of Map.Map.agda, so to be able to formalize some proof we made an instance for it and proved that function for that instance. An example of this can be found in the function traverseWithKey of Map.Traversal with the test in Test.Traversal and the instance in Map.Map.
+The proofs mostly use what was taught in the Agda lectures, but the there in $\in$ was changed to thereL and thereR to prove the branch of the element.
+When some functions were proved, it became clear that there are missing cases that only arise when the function is not used properly. An example of this can be found in a part of the balanceL function in Listing \ref{balanceL}.
+
+\begin{lstlisting}[label=balanceL,caption=balanceL assumes that the size of a node is 3 when the right branch is a tip.]
+balanceL k v (node _ lk lv tip (node _ lrk lrv _ _)) tip = 
+    node 3 lrk lrv (node 1 lk lv tip tip) (node 1 k v tip tip)
+\end{lstlisting}
+
+An example of a function that is proved formally is foldr which is partly shown in Listing \ref{foldrProof}. We did not expect this proof to be so hard as the function is so similar to the foldr function on lists, but the recursive calls to foldr made it harder (the elems function also uses foldr).
+
+\begin{lstlisting}[label=foldrProof,caption=The following equality is proved foldr f z $\equiv$ foldr f z . elems]    
+foldr(*$\equiv$*)foldrList-elems : {{Comparable K}} (*$\to$*) (f : A (*$\to$*) V (*$\to$*) V) 
+  (*$\to$*) (z : V) (*$\to$*) (m : Map K A) (*$\to$*) foldr f z m (*$\equiv$*) foldrList f z (elems m)
+foldr(*$\equiv$*)foldrList-elems f z tip = refl
+foldr(*$\equiv$*)foldrList-elems f z (node x k v l r) (*$\equiv$*) 
+  foldr f z (node x k v l r) 
+      (*$\equiv\langle$*) ((foldr(*$\equiv$*)foldrList-elems f z r) under (f v)) 
+      under ((*$\lambda$*) y (*$\to$*) foldr f y l) (*$\rangle$*)
+  (foldr f (f v (foldrList f z (elems r))) l 
+      (*$\equiv\langle$*) foldr(*$\equiv$*)foldrList-elems f (f v (foldrList f z (elems r))) l (*$\rangle$*)
+  (foldrList f (f v (foldrList f z (elems r))) (elems l) 
+      (*$\equiv\langle$*) sym (foldrList-split f z (elems l) (v :: elems r)) (*$\rangle$*)
+  (foldrList f z (elems l ++ (v :: elems r)) 
+      (*$\equiv\langle$*) (sym (elems(*$\equiv$*)elems  x k v l r)) under (foldrList f z) (*$\rangle$*)
+  (foldrList f z (elems (node x k v l r)) (*$\blacksquare$*))))) 
+\end{lstlisting}
+
+\section*{Performance}
+
+\end{document}
